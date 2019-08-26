@@ -27,7 +27,7 @@ public class OurstoryappApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(OurstoryappApplication.class, args);
 		
-		
+		// test
 		logger.info("Hello Spring Boot");  
 	}
 
