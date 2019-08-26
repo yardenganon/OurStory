@@ -25,6 +25,12 @@ public class User {
         private String state;
         private String city;
         private boolean status;
+        
+        
+        public User()
+        {
+        	
+        }
         public User(int user_id, String first_name, String last_name, String password, String email, String profile_picture, String gender, Date date_of_birth, Date date_of_sign_up, Date date_of_last_sign_in, String state, String city, boolean status) {
             this.user_id = user_id;
             this.first_name = first_name;
