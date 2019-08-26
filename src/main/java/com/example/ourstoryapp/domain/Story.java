@@ -11,7 +11,7 @@ import javax.persistence.Id;
 @Entity
 public class Story{
    @Id
-   @GeneratedValue(strategy=GenerationType.AUTO)
+   @GeneratedValue(strategy=GenerationType.IDENTITY)
    private long Story_ID;
    private long Owner_ID;
    private String Date_Of_Birth, Date_Of_Death,Name_Of_Person;

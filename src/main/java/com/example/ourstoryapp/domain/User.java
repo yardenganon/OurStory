@@ -1,10 +1,14 @@
 package com.example.ourstoryapp.domain;
 
 import java.sql.Date;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Past;
 @Entity
 public class User {
@@ -26,10 +30,9 @@ public class User {
         private String city;
         private boolean status;
         
-        
+
         public User()
         {
-        	
         }
         public User(int user_id, String first_name, String last_name, String password, String email, String profile_picture, String gender, Date date_of_birth, Date date_of_sign_up, Date date_of_last_sign_in, String state, String city, boolean status) {
             this.user_id = user_id;
@@ -45,6 +48,7 @@ public class User {
             this.state = state;
             this.city = city;
             this.status = status;
+            //this.comments = comments;
         }
         public int getUser_id() {
             return user_id;
