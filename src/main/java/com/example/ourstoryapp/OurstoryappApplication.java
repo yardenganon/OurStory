@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.example.ourstoryapp.da.CommentRepository;
+import com.example.ourstoryapp.da.LikeRepository;
 import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.da.StoryRepository;
 import com.example.ourstoryapp.da.UserRepository;
@@ -35,6 +36,8 @@ public class OurstoryappApplication {
 	private UserRepository user_repository;
 	@Autowired
 	private CommentRepository comment_repository;
+	@Autowired
+	private LikeRepository like_repository;
 	
 	
 	private static final Logger logger = LoggerFactory.getLogger(OurstoryappApplication.class);
@@ -63,7 +66,19 @@ public class OurstoryappApplication {
 //			memory_repository.save(m1);
 //			comment_repository.save(c1);
 			
-			Like l1 = new Like(new User());
+			
+			//Like l2 = new Like(new User());
+
+			//setlikes.add(l2);
+
+			Memory m1 = new Memory(1,"sakdjkalsdj",d1);
+			memory_repository.save(m1);
+			Like l1 = new Like(true,new User());
+			Set<Like> setlikes = new HashSet<>();
+			setlikes.add(l1);
+			m1.setLikes(setlikes);
+	
+			like_repository.save(l1);
 			
 
 

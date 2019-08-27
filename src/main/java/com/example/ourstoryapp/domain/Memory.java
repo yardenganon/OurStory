@@ -72,7 +72,15 @@ public class Memory {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
+	public Memory(int storyid,String dec, Date datecreated)
+	{
+		this.story_id = storyid;
+		this.description = dec;
+		this.create_date = datecreated;
+		
+
+		
+	}
 	
 	public Memory(int storyid,String dec, Date datecreated, Set<Like> likes)
 	{

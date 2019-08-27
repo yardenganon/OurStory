@@ -35,8 +35,10 @@ public class User {
 	
 	
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user_liked")
-	Set<Like> likes = new HashSet<>();
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+//	Set<Like> likes = new HashSet<>();
+
+
 
 	public User() {
 	}
@@ -60,7 +62,13 @@ public class User {
 		//this.stories = null;
 		// this.comments = comments;
 	}
-
+//	public Set<Like> getLikes() {
+//		return likes;
+//	}
+//
+//	public void setLikes(Set<Like> likes) {
+//		this.likes = likes;
+//	}
 	public int getUser_id() {
 		return user_id;
 	}
@@ -163,5 +171,27 @@ public class User {
 
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + user_id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (user_id != other.user_id)
+			return false;
+		return true;
 	}
 }
