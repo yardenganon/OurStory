@@ -1,5 +1,7 @@
 package com.example.ourstoryapp.domain;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -7,25 +9,28 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Story {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long Story_ID;
-	private long Owner_ID;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "owner")
+	private User owner;
+	
+	
+	
 	private String Date_Of_Birth, Date_Of_Death, Name_Of_Person;
 	private String picture;
-	// ArrayList<Memory> memorys;
+	
 
-//	@ManyToOne(fetch = FetchType.EAGER)
-//	@JoinColumn(name = "user")
-//	private User user;
-
-	public Story(long story_ID, long owner_ID, String date_Of_Birth, String date_Of_Death, String name_Of_Person,
+	public Story(long story_ID, User owner_ID, String date_Of_Birth, String date_Of_Death, String name_Of_Person,
 			String picture, User user) {
 		Story_ID = story_ID;
-		Owner_ID = owner_ID;
+		owner = owner_ID;
 		Date_Of_Birth = date_Of_Birth;
 		Date_Of_Death = date_Of_Death;
 		Name_Of_Person = name_Of_Person;
@@ -52,12 +57,12 @@ public class Story {
 		Story_ID = story_ID;
 	}
 
-	public long getOwner_ID() {
-		return Owner_ID;
+	public User getOwner_ID() {
+		return owner;
 	}
 
-	public void setOwner_ID(long owner_ID) {
-		Owner_ID = owner_ID;
+	public void setOwner_ID(User owner_ID) {
+		owner = owner_ID;
 	}
 
 	public String getDate_Of_Birth() {

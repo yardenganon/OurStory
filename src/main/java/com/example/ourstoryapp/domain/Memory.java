@@ -3,14 +3,20 @@ package com.example.ourstoryapp.domain;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.net.URI;
 import java.util.ArrayList;
 
+
+import javax.persistence.JoinColumn;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -21,7 +27,10 @@ public class Memory {
 	
 	
 	private long story_id;
-	private String creator_id;
+	
+	@ManyToOne
+    @JoinColumn(name = "creator_id")
+	private User creator;
 	private String description;
 	private Date memory_date;
 	private Date create_date;
@@ -31,36 +40,39 @@ public class Memory {
 //	private List<URI> videos;
 //	private List<Tag> tags;
 //	private List<User> likes;
+	
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
 	private List<Comment> comments;
 	//private ArrayList<User> shares;
 	private boolean is_private;
 	
+	@ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "tag_in_memory", joinColumns = @JoinColumn(name = "memory_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "tag_name", referencedColumnName = "tag_name"))
+    private Set<Tag> tags;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="memory")
+	private Set<Like> likes;
+	
+	
+	
+	
+	public Set<Like> getLikes() {
+		return likes;
+	}
+
+
+	public void setLikes(Set<Like> likes) {
+		this.likes = likes;
+	}
+
+
 	public Memory() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Memory(long story_id, String creator_id, String description, Date memory_date, Date create_date,
-			Feeling feeling, String location, ArrayList<URI> pictures, ArrayList<URI> videos, ArrayList<Tag> tags,
-			ArrayList<User> likes, ArrayList<Comment> comments, ArrayList<User> shares, boolean is_private) {
-		super();
-		
-		this.story_id = story_id;
-		this.creator_id = creator_id;
-		this.description = description;
-		this.memory_date = memory_date;
-		this.create_date = create_date;
-		this.feeling = feeling;
-		this.location = location;
-//		this.pictures = pictures;
-//		this.videos = videos;
-//		this.tags = tags;
-//		this.likes = likes;
-		this.comments = comments;
-//		this.shares = shares;
-		this.is_private = is_private;
-	}
+	
 	public Memory(int storyid,String dec, Date datecreated)
 	{
 		this.story_id = storyid;
@@ -79,11 +91,11 @@ public class Memory {
 	public void setStory_id(long story_id) {
 		this.story_id = story_id;
 	}
-	public String getCreator_id() {
-		return creator_id;
+	public User getCreator_id() {
+		return creator;
 	}
-	public void setCreator_id(String creator_id) {
-		this.creator_id = creator_id;
+	public void setCreator_id(User creator_id) {
+		this.creator = creator_id;
 	}
 	public String getDescription() {
 		return description;
@@ -115,42 +127,13 @@ public class Memory {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-//	public ArrayList<URI> getPictures() {
-//		return pictures;
-//	}
-//	public void setPictures(ArrayList<URI> pictures) {
-//		this.pictures = pictures;
-//	}
-//	public ArrayList<URI> getVideos() {
-//		return videos;
-//	}
-//	public void setVideos(ArrayList<URI> videos) {
-//		this.videos = videos;
-//	}
-//	public ArrayList<Tag> getTags() {
-//		return tags;
-//	}
-//	public void setTags(ArrayList<Tag> tags) {
-//		this.tags = tags;
-//	}
-//	public ArrayList<User> getLikes() {
-//		return likes;
-//	}
-//	public void setLikes(ArrayList<User> likes) {
-//		this.likes = likes;
-//	}
-//	public ArrayList<Comment> getComments() {
-//		return comments;
-//	}
+	
+	
+
 	public void setComments(ArrayList<Comment> comments) {
 		this.comments = comments;
 	}
-//	public ArrayList<User> getShares() {
-//		return shares;
-//	}
-//	public void setShares(ArrayList<User> shares) {
-//		this.shares = shares;
-//	}
+
 	public boolean isIs_private() {
 		return is_private;
 	}

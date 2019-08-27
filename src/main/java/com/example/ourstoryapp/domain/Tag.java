@@ -1,12 +1,41 @@
 package com.example.ourstoryapp.domain;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Tag {
+
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+//	long id;
 	String tag_name;
+	@ManyToMany(mappedBy = "tags")
+	private Set<Memory> memories;
+
+	@ManyToMany(mappedBy = "tags")
+	private Set<Comment> comments;
+
+	public Set<Memory> getMemories() {
+		return memories;
+	}
+
+	public void setMemories(Set<Memory> memories) {
+		this.memories = memories;
+	}
+
+	public Set<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
+	}
 
 	public Tag() {
 		super();
