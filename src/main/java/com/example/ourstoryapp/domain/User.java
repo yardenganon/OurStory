@@ -2,6 +2,7 @@ package com.example.ourstoryapp.domain;
 
 import java.sql.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -9,7 +10,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Past;
 
 @Entity
@@ -17,7 +21,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int user_id;
+	private long user_id;
 	private String email;
 
 	private String first_name;
@@ -35,41 +39,25 @@ public class User {
 	
 	
 	
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-//	Set<Like> likes = new HashSet<>();
-
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private List<Comment> comments;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private List<Likes> likes;
+	
 
 
 	public User() {
 	}
 
-	public User(int user_id, String first_name, String last_name, String password, String email, String profile_picture,
-			String gender, Date date_of_birth, Date date_of_sign_up, Date date_of_last_sign_in, String state,
-			String city, boolean status) {
-		this.user_id = user_id;
+	public User(String first_name, String last_name, String password) {
+		super();
 		this.first_name = first_name;
 		this.last_name = last_name;
 		this.password = password;
-		this.email = email;
-		this.profile_picture = profile_picture;
-		this.gender = gender;
-		this.date_of_birth = date_of_birth;
-		this.date_of_sign_up = date_of_sign_up;
-		this.date_of_last_sign_in = date_of_last_sign_in;
-		this.state = state;
-		this.city = city;
-		this.status = status;
-		//this.stories = null;
-		// this.comments = comments;
 	}
-//	public Set<Like> getLikes() {
-//		return likes;
-//	}
-//
-//	public void setLikes(Set<Like> likes) {
-//		this.likes = likes;
-//	}
-	public int getUser_id() {
+
+	public long getUser_id() {
 		return user_id;
 	}
 
@@ -171,14 +159,6 @@ public class User {
 
 	public void setStatus(boolean status) {
 		this.status = status;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + user_id;
-		return result;
 	}
 
 	@Override

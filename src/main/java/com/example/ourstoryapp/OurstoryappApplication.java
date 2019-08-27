@@ -16,12 +16,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.example.ourstoryapp.da.CommentRepository;
-import com.example.ourstoryapp.da.LikeRepository;
+
+import com.example.ourstoryapp.da.LikesRepository;
 import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.da.StoryRepository;
 import com.example.ourstoryapp.da.UserRepository;
 import com.example.ourstoryapp.domain.Comment;
-import com.example.ourstoryapp.domain.Like;
 import com.example.ourstoryapp.domain.Memory;
 import com.example.ourstoryapp.domain.Tag;
 import com.example.ourstoryapp.domain.User;
@@ -37,7 +37,7 @@ public class OurstoryappApplication {
 	@Autowired
 	private CommentRepository comment_repository;
 	@Autowired
-	private LikeRepository like_repository;
+	private LikesRepository likes_repository;
 	
 	
 	private static final Logger logger = LoggerFactory.getLogger(OurstoryappApplication.class);
@@ -71,14 +71,14 @@ public class OurstoryappApplication {
 
 			//setlikes.add(l2);
 
-			Memory m1 = new Memory(1,"sakdjkalsdj",d1);
-			memory_repository.save(m1);
-			Like l1 = new Like(true,new User());
-			Set<Like> setlikes = new HashSet<>();
-			setlikes.add(l1);
-			m1.setLikes(setlikes);
+//			Memory m1 = new Memory(1,"sakdjkalsdj",d1);
+//			memory_repository.save(m1);
+//			Like l1 = new Like(true,new User());
+//			Set<Like> setlikes = new HashSet<>();
+//			setlikes.add(l1);
+//			m1.setLikes(setlikes);
 	
-			like_repository.save(l1);
+//			like_repository.save(l1);
 			
 
 
