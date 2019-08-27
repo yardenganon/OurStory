@@ -1,6 +1,7 @@
 package com.example.ourstoryapp.domain;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -33,8 +34,9 @@ public class User {
 	private boolean status;
 	
 	
-	//@OneToMany(cascade = CascadeType.ALL, mappedBy = "User")
-	//Set<Story> stories;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user_liked")
+	Set<Like> likes = new HashSet<>();
 
 	public User() {
 	}

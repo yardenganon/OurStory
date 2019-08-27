@@ -2,6 +2,7 @@ package com.example.ourstoryapp.domain;
 
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.net.URI;
@@ -73,11 +74,17 @@ public class Memory {
 	}
 	
 	
-	public Memory(int storyid,String dec, Date datecreated)
+	public Memory(int storyid,String dec, Date datecreated, Set<Like> likes)
 	{
 		this.story_id = storyid;
 		this.description = dec;
 		this.create_date = datecreated;
+		
+		for (Like like: likes) {
+			like.setMemory(this);
+		}
+		this.likes= likes;
+		
 	}
 	public long getId() {
 		return id;
