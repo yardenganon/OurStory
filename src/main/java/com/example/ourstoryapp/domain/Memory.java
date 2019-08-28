@@ -29,18 +29,14 @@ public class Memory {
 	private Story story;
 
 	@ManyToOne
-	@JoinColumn(name = "creator")
-	private User creator;
+	@JoinColumn(name = "contributer")
+	private User contributer;
 
 	private String description;
 	private Date memory_date;
 	private Date create_date;
-	private Feeling feeling;
+	private String feeling;
 	private String location;
-//	private List<URI> pictures;
-//	private List<URI> videos;
-//	private List<Tag> tags;
-//	private List<User> likes;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
 	private List<Comment> comments;
@@ -54,6 +50,11 @@ public class Memory {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
 	private List<Likes> likes;
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
+	private List<Picture> pictures;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
+	private List<Video> videos;
 
 	public Memory() {
 		super();
@@ -65,6 +66,20 @@ public class Memory {
 		this.description = dec;
 		this.create_date = datecreated;
 
+	}
+
+	public Memory(Story story, User contributer, String description, Date memory_date, Date create_date, String feeling,
+			String location, List<Picture> pictures) {
+		super();
+		this.story = story;
+		this.contributer = contributer;
+		this.description = description;
+		this.memory_date = memory_date;
+		this.create_date = create_date;
+		this.feeling = feeling;
+		this.location = location;
+		if (pictures != null)
+			this.pictures = pictures;
 	}
 
 	public long getId() {
@@ -84,11 +99,11 @@ public class Memory {
 	}
 
 	public User getCreator_id() {
-		return creator;
+		return contributer;
 	}
 
 	public void setCreator_id(User creator_id) {
-		this.creator = creator_id;
+		this.contributer = creator_id;
 	}
 
 	public String getDescription() {
@@ -115,11 +130,11 @@ public class Memory {
 		this.create_date = create_date;
 	}
 
-	public Feeling getFeeling() {
+	public String getFeeling() {
 		return feeling;
 	}
 
-	public void setFeeling(Feeling feeling) {
+	public void setFeeling(String feeling) {
 		this.feeling = feeling;
 	}
 
@@ -140,11 +155,11 @@ public class Memory {
 	}
 
 	public User getCreator() {
-		return creator;
+		return contributer;
 	}
 
 	public void setCreator(User creator) {
-		this.creator = creator;
+		this.contributer = creator;
 	}
 
 	public List<Comment> getComments() {
@@ -174,7 +189,9 @@ public class Memory {
 	public void setIs_private(boolean is_private) {
 		this.is_private = is_private;
 	}
-
+	public void addLike(Likes l) {
+		likes.add(l);
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

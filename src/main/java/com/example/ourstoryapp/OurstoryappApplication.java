@@ -22,6 +22,7 @@ import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.da.StoryRepository;
 import com.example.ourstoryapp.da.UserRepository;
 import com.example.ourstoryapp.domain.Comment;
+import com.example.ourstoryapp.domain.Likes;
 import com.example.ourstoryapp.domain.Memory;
 import com.example.ourstoryapp.domain.Tag;
 import com.example.ourstoryapp.domain.User;
@@ -79,6 +80,16 @@ public class OurstoryappApplication {
 //			m1.setLikes(setlikes);
 	
 //			like_repository.save(l1);
+			
+			User u = new User();
+			Memory m1 = new Memory();
+			Likes l = new Likes(m1,u);
+
+			user_repository.save(u);
+			memory_repository.save(m1);
+			
+			likes_repository.save(l);
+
 			
 
 

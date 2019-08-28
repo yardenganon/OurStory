@@ -1,5 +1,6 @@
 package com.example.ourstoryapp.domain;
 
+import java.net.URI;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -27,7 +28,6 @@ public class User {
 	private String first_name;
 	private String last_name;
 	private String password;
-	private String profile_picture;
 	private String gender;
 	@Past
 	private Date date_of_birth;
@@ -37,7 +37,7 @@ public class User {
 	private String city;
 	private boolean status;
 	
-	
+	private URI profile_picture;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private List<Comment> comments;
@@ -48,6 +48,7 @@ public class User {
 
 
 	public User() {
+		
 	}
 
 	public User(String first_name, String last_name, String password) {
@@ -97,11 +98,11 @@ public class User {
 		this.email = email;
 	}
 
-	public String getProfile_picture() {
+	public URI getProfile_picture() {
 		return profile_picture;
 	}
 
-	public void setProfile_picture(String profile_picture) {
+	public void setProfile_picture(URI profile_picture) {
 		this.profile_picture = profile_picture;
 	}
 
