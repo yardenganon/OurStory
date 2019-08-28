@@ -14,25 +14,24 @@ import javax.persistence.ManyToOne;
 public class Likes implements Serializable {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private int like_id;
 	
-
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "memory")
 	private Memory memory;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user")
-	private User user;
+	@JoinColumn(name = "users")
+	private User users;
 
 	
 	
 	
 	
-	public Likes(Memory memory, User user) {
+	public Likes(Memory memory, User users) {
 		super();
 		this.memory = memory;
-		this.user = user;
+		this.users = users;
 	}
 
 	public Memory getMemory() {
@@ -44,11 +43,11 @@ public class Likes implements Serializable {
 	}
 
 	public User getUser() {
-		return user;
+		return users;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUser(User users) {
+		this.users = users;
 	}
 	
 	

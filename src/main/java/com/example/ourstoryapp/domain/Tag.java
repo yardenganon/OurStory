@@ -13,8 +13,8 @@ public class Tag {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-//	long id;
 	String tag_name;
+	
 	@ManyToMany(mappedBy = "tags")
 	private Set<Memory> memories;
 

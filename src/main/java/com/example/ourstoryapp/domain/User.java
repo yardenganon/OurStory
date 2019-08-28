@@ -15,21 +15,24 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.Past;
 
 @Entity
+@Table(name="users")
 public class User {
-
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long user_id;
+	
 	private String email;
 
 	private String first_name;
 	private String last_name;
 	private String password;
 	private String gender;
-	@Past
+	
 	private Date date_of_birth;
 	private Date date_of_sign_up;
 	private Date date_of_last_sign_in;
@@ -39,11 +42,17 @@ public class User {
 	
 	private URI profile_picture;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
 	private List<Comment> comments;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
 	private List<Likes> likes;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "contributer")
+	private List<Memory> memories;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+	private List<Story> owners;
 	
 
 

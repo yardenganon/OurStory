@@ -13,8 +13,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+
 public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,27 +26,29 @@ public class Comment {
 	@JoinColumn(name = "memory")
 	private Memory memory;
 
-	private Date createDate;
-
 	@ManyToOne
-	@JoinColumn(name = "user")
-	private User user;
-	private String text;
-
+	@JoinColumn(name = "users")
+	private User users;
+	
 	@ManyToMany(cascade = CascadeType.MERGE)
 	@JoinTable(name = "tag_in_comment", joinColumns = @JoinColumn(name = "comment_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "tag_name", referencedColumnName = "tag_name"))
 	private Set<Tag> tags;
+	
+	private Date createDate;
+	private String text;
+
+
 
 	public Comment() {
 		// super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Comment(Memory memory, Date createDate, User user, String text) {
+	public Comment(Memory memory, Date createDate, User users, String text) {
 		super();
 		this.memory = memory;
 		this.createDate = createDate;
-		this.user = user;
+		this.users = users;
 		this.text = text;
 	}
 
@@ -64,11 +68,11 @@ public class Comment {
 	}
 
 	public User getUser() {
-		return user;
+		return users;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUser(User users) {
+		this.users = users;
 	}
 
 	public Set<Tag> getTags() {
