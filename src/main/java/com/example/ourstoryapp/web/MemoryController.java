@@ -1,4 +1,4 @@
-package com.example.ourstoryapp;
+package com.example.ourstoryapp.web;
 
 import javax.validation.Valid;
 
