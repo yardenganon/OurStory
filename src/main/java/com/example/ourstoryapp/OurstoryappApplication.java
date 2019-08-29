@@ -1,11 +1,7 @@
 package com.example.ourstoryapp;
 
 
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,15 +12,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.example.ourstoryapp.da.CommentRepository;
-
 import com.example.ourstoryapp.da.LikesRepository;
 import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.da.StoryRepository;
 import com.example.ourstoryapp.da.UserRepository;
-import com.example.ourstoryapp.domain.Comment;
 import com.example.ourstoryapp.domain.Likes;
 import com.example.ourstoryapp.domain.Memory;
-import com.example.ourstoryapp.domain.Tag;
 import com.example.ourstoryapp.domain.User;
 
 @SpringBootApplication
