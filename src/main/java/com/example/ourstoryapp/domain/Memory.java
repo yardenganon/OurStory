@@ -82,28 +82,28 @@ public class Memory {
 			this.pictures = pictures;
 	}
 
-	public long getId() {
+	public long getMemory_id() {
 		return memory_id;
 	}
 
-	public void setId(long id) {
-		this.memory_id = id;
+	public void setMemory_id(long memory_id) {
+		this.memory_id = memory_id;
 	}
 
-	public Story getStory_id() {
+	public Story getStory() {
 		return story;
 	}
 
-	public void setStory_id(Story story_id) {
-		this.story = story_id;
+	public void setStory(Story story) {
+		this.story = story;
 	}
 
-	public User getCreator_id() {
+	public User getContributer() {
 		return contributer;
 	}
 
-	public void setCreator_id(User creator_id) {
-		this.contributer = creator_id;
+	public void setContributer(User contributer) {
+		this.contributer = contributer;
 	}
 
 	public String getDescription() {
@@ -146,39 +146,11 @@ public class Memory {
 		this.location = location;
 	}
 
-	public Story getStory() {
-		return story;
-	}
-
-	public void setStory(Story story) {
-		this.story = story;
-	}
-
-	public User getCreator() {
-		return contributer;
-	}
-
-	public void setCreator(User creator) {
-		this.contributer = creator;
-	}
-
 	public List<Comment> getComments() {
 		return comments;
 	}
 
 	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
-
-	public Set<Tag> getTags() {
-		return tags;
-	}
-
-	public void setTags(Set<Tag> tags) {
-		this.tags = tags;
-	}
-
-	public void setComments(ArrayList<Comment> comments) {
 		this.comments = comments;
 	}
 
@@ -189,9 +161,39 @@ public class Memory {
 	public void setIs_private(boolean is_private) {
 		this.is_private = is_private;
 	}
-	public void addLike(Likes l) {
-		likes.add(l);
+
+	public Set<Tag> getTags() {
+		return tags;
 	}
+
+	public void setTags(Set<Tag> tags) {
+		this.tags = tags;
+	}
+
+	public List<Likes> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(List<Likes> likes) {
+		this.likes = likes;
+	}
+
+	public List<Picture> getPictures() {
+		return pictures;
+	}
+
+	public void setPictures(List<Picture> pictures) {
+		this.pictures = pictures;
+	}
+
+	public List<Video> getVideos() {
+		return videos;
+	}
+
+	public void setVideos(List<Video> videos) {
+		this.videos = videos;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -213,4 +215,6 @@ public class Memory {
 			return false;
 		return true;
 	}
+
+	
 }
