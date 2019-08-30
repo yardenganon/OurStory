@@ -10,28 +10,41 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Likes implements Serializable {
-	@Id 
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int like_id;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "memory")
+	@JsonIgnore
 	private Memory memory;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "users")
+	@JsonIgnore
 	private User users;
 
-	
-	
-	
-	
-	public Likes(Memory memory, User users) {
+	public Likes() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Likes(Memory memory, User user) {
 		super();
 		this.memory = memory;
-		this.users = users;
+		this.users = user;
+	}
+
+	public int getLike_id() {
+		return like_id;
+	}
+
+	public void setLike_id(int like_id) {
+		this.like_id = like_id;
 	}
 
 	public Memory getMemory() {
@@ -46,10 +59,8 @@ public class Likes implements Serializable {
 		return users;
 	}
 
-	public void setUser(User users) {
-		this.users = users;
+	public void setUser(User user) {
+		this.users = user;
 	}
-	
-	
-	
+
 }

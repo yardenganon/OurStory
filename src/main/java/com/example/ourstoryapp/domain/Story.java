@@ -31,6 +31,10 @@ public class Story {
 	private Date date_of_birth, date_of_death;
 	private URI picture;
 
+	public Story() {
+		super();
+	}
+
 	public Story(User owner, String name_of_person, Date date_of_birth, Date date_of_death, URI picture) {
 		super();
 		this.owner = owner;
