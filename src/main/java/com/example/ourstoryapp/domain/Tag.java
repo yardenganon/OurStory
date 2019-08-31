@@ -15,6 +15,7 @@ public class Tag {
 	@Id
 	@Column(name ="tag_name",nullable=false)
 	private String tag_name;
+
 	
 	@ManyToMany(mappedBy = "tags")
 	 @JsonManagedReference
