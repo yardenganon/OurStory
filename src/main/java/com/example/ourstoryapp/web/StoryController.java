@@ -43,14 +43,14 @@ public class StoryController {
 
 	// get story by ID (Read)
 	@GetMapping("/stories/findById/{id}")
-	public ResponseEntity<Story> findById(@PathVariable(value = "story_id") long storyId) {
+	public ResponseEntity<Story> findById(@PathVariable(value = "id") long storyId) {
 		return repository.findById(storyId).map(record -> ResponseEntity.ok().body(record))
 				.orElse(ResponseEntity.notFound().build());
 	}
 	
 	// delete story by ID (Delete)
 	@DeleteMapping("/stories/delete/{id}")
-	public ResponseEntity<?> delete(@PathVariable("story_id") long storyId) {
+	public ResponseEntity<?> delete(@PathVariable("id") long storyId) {
 		return repository.findById(storyId).map(record -> {
 			repository.deleteById(storyId);
 			return ResponseEntity.ok().build();
@@ -59,7 +59,7 @@ public class StoryController {
 	
 	// update story by id using new values (Update)
 	@PutMapping(value="/{id}")
-	  public ResponseEntity<Story> update(@PathVariable("story_id") long storyId,
+	  public ResponseEntity<Story> update(@PathVariable("id") long storyId,
 	                                        @RequestBody Story story){
 	    return repository.findById(storyId)
 	        .map(record -> {
