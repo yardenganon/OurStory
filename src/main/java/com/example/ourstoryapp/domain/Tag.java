@@ -12,7 +12,7 @@ import javax.persistence.ManyToMany;
 public class Tag {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)	
 	String tag_name;
 	
 	@ManyToMany(mappedBy = "tags")
