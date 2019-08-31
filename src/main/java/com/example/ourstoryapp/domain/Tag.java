@@ -2,9 +2,8 @@ package com.example.ourstoryapp.domain;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
@@ -14,8 +13,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Tag {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	String tag_name;
+	@Column(name ="tag_name",nullable=false)
+	private String tag_name;
 	
 	@ManyToMany(mappedBy = "tags")
 	 @JsonManagedReference
