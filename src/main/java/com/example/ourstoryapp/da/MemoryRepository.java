@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.ourstoryapp.domain.Memory;
 import com.example.ourstoryapp.domain.Tag;
 
+@RepositoryRestResource
 public interface MemoryRepository extends JpaRepository<Memory, Long> {
 
 	@Query(value = "SELECT * FROM MEMORY WHERE Memory.contributer = ?1 ORDER BY Memory.create_date DESC", nativeQuery = true)
