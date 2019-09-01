@@ -47,6 +47,8 @@ public class Story {
 		this.date_of_death = date_of_death;
 		if (picture != null)
 			this.picture = picture;
+		//else
+			//this.picture = defualtProfilePicture;
 
 	}
 

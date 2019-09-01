@@ -2,7 +2,7 @@ package com.example.ourstoryapp.web;
 
 import javax.validation.Valid;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +20,9 @@ import com.example.ourstoryapp.domain.Story;
 @RestController
 public class StoryController {
 	
+	@Autowired
 	StoryRepository repository; 
 	
-	StoryController(StoryRepository sc) // best practice- don't use @Autowired here
-	{
-		this.repository = sc;
-	}
 	
 	// Basic CRUD
 	
@@ -47,6 +44,13 @@ public class StoryController {
 		return repository.findById(storyId).map(record -> ResponseEntity.ok().body(record))
 				.orElse(ResponseEntity.notFound().build());
 	}
+	
+	// get story by name_of_person (Read)
+//	@GetMapping("/stories/findByName/{id}")
+//	public ResponseEntity<Story> findByName(@PathVariable(value = "name_of_person") String storyName) {
+//		return repository.findByName(storyName).map(record -> ResponseEntity.ok().body(record))
+//				.orElse(ResponseEntity.notFound().build());
+//	}
 	
 	// delete story by ID (Delete)
 	@DeleteMapping("/stories/delete/{id}")
