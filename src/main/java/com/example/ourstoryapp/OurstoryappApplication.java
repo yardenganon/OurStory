@@ -30,6 +30,7 @@ import com.example.ourstoryapp.domain.User;
 
 @SpringBootApplication
 public class OurstoryappApplication {
+	//test 2
 	//test
 	@Autowired
 	private StoryRepository story_repository;
