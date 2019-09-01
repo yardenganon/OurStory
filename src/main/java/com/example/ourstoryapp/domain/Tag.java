@@ -13,11 +13,12 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Tag {
 
 	@Id
-	@Column(name ="tag_name",nullable=false)
-	private String tag_name;
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	String tag_name;
 
-	
-	@ManyToMany(mappedBy = "tags")
+	@Column(name ="tag_name",nullable=false)
+
+		@ManyToMany(mappedBy = "tags")
 	 @JsonManagedReference
 	private Set<Memory> memories;
 
