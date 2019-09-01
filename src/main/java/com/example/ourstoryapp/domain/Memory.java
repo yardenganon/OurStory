@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,11 +15,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SqlResultSetMapping;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+
 public class Memory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,10 +50,10 @@ public class Memory {
 
 	@ManyToMany(cascade = CascadeType.MERGE)
 	@JoinTable(name = "tag_in_memory", joinColumns = @JoinColumn(name = "memory_id", referencedColumnName = "memory_id"), inverseJoinColumns = @JoinColumn(name = "tag_name", referencedColumnName = "tag_name"))
+	@JsonIgnore
 	private Set<Tag> tags;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
-	@JsonIgnore
 	private List<Likes> likes;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
@@ -59,6 +65,16 @@ public class Memory {
 	public Memory() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public Memory(User contributer, Date memory_date, Set<Tag> tags, Story story,String description) {
+		super();
+		this.contributer = contributer;
+		this.memory_date = memory_date;
+		this.tags = tags;
+		this.story = story;
+		this.description = description;
+
 	}
 
 	public Memory(Story storyid, String dec, Date datecreated) {
@@ -216,5 +232,4 @@ public class Memory {
 		return true;
 	}
 
-	
 }

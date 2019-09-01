@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Story {
 	@Id
@@ -26,6 +28,7 @@ public class Story {
 	private User owner;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "story")
+	@JsonIgnore
 	private List<Memory> memories;
 	private String name_of_person;
 	private Date date_of_birth, date_of_death;
@@ -40,6 +43,10 @@ public class Story {
 		if (picture != null)
 			this.picture = picture;
 
+	}
+
+	public Story() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public User getOwner() {
