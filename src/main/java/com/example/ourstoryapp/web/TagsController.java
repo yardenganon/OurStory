@@ -16,6 +16,7 @@ import com.example.ourstoryapp.da.TagRepository;
 import com.example.ourstoryapp.domain.Tag;
 
 @RestController 
+@RequestMapping("/tags")
 public class TagsController {
 
 	@Autowired

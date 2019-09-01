@@ -19,6 +19,7 @@ import com.example.ourstoryapp.da.TagRepository;
 import com.example.ourstoryapp.domain.Tag;
 
 @RestController 
+@RequestMapping("/tags_in_memory")
 public class TagsInMemoryController {
 	@Autowired
     private MemTagRepository mem_tags_repository;

@@ -19,6 +19,7 @@ import com.example.ourstoryapp.domain.Memory;
 import com.example.ourstoryapp.domain.Tag;
 
 @RestController
+@RequestMapping("/memories")
 public class MemoryController {
 
 	@Autowired
