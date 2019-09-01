@@ -23,13 +23,13 @@ public class TagsController {
     private TagRepository repository;
 
 	//return all tags	
-	@RequestMapping("/tags/findAll")
+	@RequestMapping("/findAll")
 	public Iterable<Tag> getTags() {
 		return repository.findAll();
     } 
 	
 	//delete tag
-	@DeleteMapping("/tags/delete/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") String tag_name) {
 		return repository.findById(tag_name).map(record -> {
 			repository.deleteById(tag_name);
@@ -38,13 +38,13 @@ public class TagsController {
 	}
 	
 	//add tag
-	@PostMapping("/tags/create")
+	@PostMapping("/create")
 	public Tag create(@Valid @RequestBody Tag tag) {
 		return repository.save(tag);	
 	}
 	
 	// find tag by name
-	@GetMapping("/tags/findById/{id}")
+	@GetMapping("/findById/{id}")
 	public ResponseEntity<Tag> findByid( @PathVariable(value = "id") String tag_name) {
 		return repository.findById(tag_name).map(record -> ResponseEntity.ok().body(record))
 				.orElse(ResponseEntity.notFound().build());

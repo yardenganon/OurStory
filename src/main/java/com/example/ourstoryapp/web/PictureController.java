@@ -24,23 +24,23 @@ public class PictureController {
 	@Autowired
 	PictureRepository repository;
 
-	@GetMapping("/picture/findAll")
+	@GetMapping("/findAll")
 	public Iterable<Picture> findAll() {
 		return repository.findAll();
 	}
 
-	@PostMapping("/picture/create")
+	@PostMapping("/create")
 	public Picture create(@Valid @RequestBody Picture picture) {
 		return repository.save(picture);
 	}
 
-	@GetMapping("/picture/findById/{id}")
+	@GetMapping("/findById/{id}")
 	public ResponseEntity<Picture> findById(@PathVariable(value = "id") URI pictureId) {
 		return repository.findById(pictureId).map(record -> ResponseEntity.ok().body(record))
 				.orElse(ResponseEntity.notFound().build());
 	}
 
-	@DeleteMapping("/picture/delete/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") URI pictureId) {
 		return repository.findById(pictureId).map(record -> {
 			repository.deleteById(pictureId);

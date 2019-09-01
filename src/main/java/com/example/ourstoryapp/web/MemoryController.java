@@ -25,23 +25,23 @@ public class MemoryController {
 	@Autowired
 	MemoryRepository repository;
 
-	@GetMapping("/memory/findAll")
+	@GetMapping("/findAll")
 	public Iterable<Memory> findAll() {
 		return repository.findAll();
 	}
 
-	@PostMapping("/memory/create")
+	@PostMapping("/create")
 	public Memory create(@Valid @RequestBody Memory memory) {
 		return repository.save(memory);
 	}
 
-	@GetMapping("/memory/findById/{id}")
+	@GetMapping("/findById/{id}")
 	public ResponseEntity<Memory> findById(@PathVariable(value = "id") long memoryId) {
 		return repository.findById(memoryId).map(record -> ResponseEntity.ok().body(record))
 				.orElse(ResponseEntity.notFound().build());
 	}
 
-	@DeleteMapping("/memory/delete/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long memoryId) {
 		return repository.findById(memoryId).map(record -> {
 			repository.deleteById(memoryId);

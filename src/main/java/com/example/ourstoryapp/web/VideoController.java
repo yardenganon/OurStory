@@ -24,23 +24,23 @@ public class VideoController {
 	@Autowired
 	VideoRepository repository;
 
-	@GetMapping("/video/findAll")
+	@GetMapping("/findAll")
 	public Iterable<Video> findAll() {
 		return repository.findAll();
 	}
 
-	@PostMapping("/video/create")
+	@PostMapping("/create")
 	public Video create(@Valid @RequestBody Video video) {
 		return repository.save(video);
 	}
 
-	@GetMapping("/video/findById/{id}")
+	@GetMapping("/findById/{id}")
 	public ResponseEntity<Video> findById(@PathVariable(value = "id") URI videoId) {
 		return repository.findById(videoId).map(record -> ResponseEntity.ok().body(record))
 				.orElse(ResponseEntity.notFound().build());
 	}
 
-	@DeleteMapping("/video/delete/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") URI videoId) {
 		return repository.findById(videoId).map(record -> {
 			repository.deleteById(videoId);

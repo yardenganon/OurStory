@@ -29,19 +29,19 @@ public class StoryController {
 	// Basic CRUD
 	
 	// get all stories - sorted by ID (Read)
-    @GetMapping("/stories/findAll")
+    @GetMapping("/findAll")
     public Iterable<Story> getStories() {
       return repository.findAll();
     }
     
     // create new instance of Story (Create)
-	@PostMapping("/stories/create")
+	@PostMapping("/create")
 	public Story create(@Valid @RequestBody Story story) {
 		return repository.save(story);
 	}
 
 	// get story by ID (Read)
-	@GetMapping("/stories/findById/{id}")
+	@GetMapping("/findById/{id}")
 	public ResponseEntity<Story> findById(@PathVariable(value = "id") long storyId) {
 		return repository.findById(storyId).map(record -> ResponseEntity.ok().body(record))
 				.orElse(ResponseEntity.notFound().build());
@@ -55,7 +55,7 @@ public class StoryController {
 //	}
 	
 	// delete story by ID (Delete)
-	@DeleteMapping("/stories/delete/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long storyId) {
 		return repository.findById(storyId).map(record -> {
 			repository.deleteById(storyId);

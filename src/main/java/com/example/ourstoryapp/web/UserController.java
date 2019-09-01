@@ -25,20 +25,20 @@ public class UserController {
     
 
 	// get all users - sorted by ID (Read)
-    @GetMapping("/users/findAll")
+    @GetMapping("/findAll")
     public Iterable<User> getUser() {
       return repository.findAll();
     }
     
     // get user by ID (Read)
- 	@GetMapping("/users/findById/{id}")
+ 	@GetMapping("/findById/{id}")
  	public ResponseEntity<User> findById(@PathVariable(value = "id") long userId) {
  		return repository.findById(userId).map(record -> ResponseEntity.ok().body(record))
  				.orElse(ResponseEntity.notFound().build());
  	}
  	
     // create new instance of User (Create)
- 	@PostMapping("/users/create")
+ 	@PostMapping("/create")
  	public User create(@Valid @RequestBody User user) {
  		return repository.save(user);
  	}
@@ -65,7 +65,7 @@ public class UserController {
 //	}     
  	
 	// delete story by ID (Delete)
-	@DeleteMapping("/users/delete/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long userId) {
 		return repository.findById(userId).map(record -> {
 			repository.deleteById(userId);
