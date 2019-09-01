@@ -1,5 +1,8 @@
 package com.example.ourstoryapp;
 
+
+
+import java.net.URI;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -77,20 +80,6 @@ public class OurstoryappApplication {
 
 			// like_repository.save(l1);
 
-			User u = new User();
-			user_repository.save(u);
-			Tag t = new Tag("sports");
-			tag_repository.save(t);
-			Set<Tag> tags = new HashSet<>();
-			tags.add(t);
-
-			Story s = new Story();
-			story_repository.save(s);
-			Memory m1 = new Memory(u, new Date(), tags, s, "fadi");
-			memory_repository.save(m1);
-			Likes l = new Likes(m1, u);
-
-			likes_repository.save(l);
 
 		};
 	}

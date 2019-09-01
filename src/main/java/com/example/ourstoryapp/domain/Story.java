@@ -25,6 +25,7 @@ public class Story {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "owner")
+	@JsonIgnore
 	private User owner;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "story")
@@ -34,6 +35,8 @@ public class Story {
 	private Date date_of_birth, date_of_death;
 	private URI picture;
 
+
+
 	public Story(User owner, String name_of_person, Date date_of_birth, Date date_of_death, URI picture) {
 		super();
 		this.owner = owner;
@@ -42,6 +45,8 @@ public class Story {
 		this.date_of_death = date_of_death;
 		if (picture != null)
 			this.picture = picture;
+		//else
+			//this.picture = defualtProfilePicture;
 
 	}
 

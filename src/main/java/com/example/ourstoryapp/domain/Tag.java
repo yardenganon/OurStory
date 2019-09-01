@@ -2,11 +2,12 @@ package com.example.ourstoryapp.domain;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Tag {
@@ -15,10 +16,14 @@ public class Tag {
 //	@GeneratedValue(strategy = GenerationType.AUTO)
 	String tag_name;
 
-	@ManyToMany(mappedBy = "tags")
+	@Column(name ="tag_name",nullable=false)
+
+		@ManyToMany(mappedBy = "tags")
+	 @JsonManagedReference
 	private Set<Memory> memories;
 
 	@ManyToMany(mappedBy = "tags")
+	 @JsonManagedReference
 	private Set<Comment> comments;
 
 	public Set<Memory> getMemories() {
