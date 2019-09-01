@@ -19,7 +19,8 @@ import com.example.ourstoryapp.da.CommentRepository;
 import com.example.ourstoryapp.da.LikesRepository;
 import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.da.StoryRepository;
-import com.example.ourstoryapp.da.TagRepositoryfadi;
+import com.example.ourstoryapp.da.TagRepository;
+import com.example.ourstoryapp.da.TagRepository;
 import com.example.ourstoryapp.da.UserRepository;
 import com.example.ourstoryapp.domain.Likes;
 import com.example.ourstoryapp.domain.Memory;
@@ -40,7 +41,7 @@ public class OurstoryappApplication {
 	@Autowired
 	private LikesRepository likes_repository;
 	@Autowired
-	private TagRepositoryfadi tag_repository;
+	private TagRepository tag_repository;
 
 	private static final Logger logger = LoggerFactory.getLogger(OurstoryappApplication.class);
 
