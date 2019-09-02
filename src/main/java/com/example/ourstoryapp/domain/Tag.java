@@ -18,8 +18,8 @@ public class Tag {
 
 	@Column(name ="tag_name",nullable=false)
 
-		@ManyToMany(mappedBy = "tags")
-	 @JsonManagedReference
+	@ManyToMany(mappedBy = "tags")
+	@JsonManagedReference
 	private Set<Memory> memories;
 
 	@ManyToMany(mappedBy = "tags")

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.example.ourstoryapp.da.StoryRepository;
+import com.example.ourstoryapp.domain.Memory;
 import com.example.ourstoryapp.domain.Story;
 
 
@@ -47,12 +48,6 @@ public class StoryController {
 				.orElse(ResponseEntity.notFound().build());
 	}
 	
-	// get story by name_of_person (Read)
-//	@GetMapping("/stories/findByName/{id}")
-//	public ResponseEntity<Story> findByName(@PathVariable(value = "name_of_person") String storyName) {
-//		return repository.findByName(storyName).map(record -> ResponseEntity.ok().body(record))
-//				.orElse(ResponseEntity.notFound().build());
-//	}
 	
 	// delete story by ID (Delete)
 	@DeleteMapping("/delete/{id}")
@@ -77,5 +72,14 @@ public class StoryController {
 	            return ResponseEntity.ok().body(updated);
 	        }).orElse(ResponseEntity.notFound().build());
 	  }
-      
+	
+	//TODO findByKeyword find story by name
+	
+	@RequestMapping("/findStoryByKeyword/{name_of_person}")
+	public Iterable<Story> findStoryByKeyword(String name_of_person) {
+		return repository.findStoryByKeyword(name_of_person);
+	}
+	
+	//TODO findMemoryTagsByStoryId
+	
 }
