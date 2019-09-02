@@ -79,9 +79,46 @@ public class StoryController {
 	@RequestMapping("/findStoriesByKeyword")
 	public Iterable<Story> findStoriesByKeyword(@RequestParam("name") String name_of_person) {
 		return repository.findStoriesByKeyword(name_of_person);
-		//return repository.findStoriesByKeyword();
 	}
 	
 	//TODO findMemoryTagsByStoryId
+	@RequestMapping("/findStoriesByDobFull")
+	public Iterable<Story> findStoriesByDobFull(@RequestParam("d") int d,@RequestParam("m") int m,@RequestParam("y") int y) {
+		return repository.findStoriesByDobFull(d,m,y);
+	}
+	
+	
+	@RequestMapping("/findStoriesByDobYearMonth")
+	public Iterable<Story> findStoriesByDobYearMonth(@RequestParam("m") int m,@RequestParam("y") int y) {
+		return repository.findStoriesByDobYearMonth(m,y);
+	}
+	
+	@RequestMapping("/findStoriesByDobYear")
+	public Iterable<Story> findStoriesByDobYear(@RequestParam("y") int y) {
+		return repository.findStoriesByDobYear(y);
+	}
+	
+	
+	
+	@RequestMapping("/findStoriesByDodFull")
+	public Iterable<Story> findStoriesByDodFull(@RequestParam("d") int d,@RequestParam("m") int m,@RequestParam("y") int y) {
+		return repository.findStoriesByDodFull(d,m,y);
+	}
+	
+	
+	@RequestMapping("/findStoriesByDodYearMonth")
+	public Iterable<Story> findStoriesByDodYearMonth(@RequestParam("m") int m,@RequestParam("y") int y) {
+		return repository.findStoriesByDodYearMonth(m,y);
+	}
+	
+	@RequestMapping("/findStoriesByDodYear")
+	public Iterable<Story> findStoriesByDodYear(@RequestParam("y") int y) {
+		return repository.findStoriesByDodYear(y);
+	}
+	
+	
+	
+	
+	
 	
 }
