@@ -15,6 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 
 public class Comment {
@@ -24,14 +26,17 @@ public class Comment {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "memory")
+	@JsonIgnore
 	private Memory memory;
 
 	@ManyToOne
 	@JoinColumn(name = "users")
+	@JsonIgnore
 	private User users;
 	
 	@ManyToMany(cascade = CascadeType.MERGE)
 	@JoinTable(name = "tag_in_comment", joinColumns = @JoinColumn(name = "comment_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "tag_name", referencedColumnName = "tag_name"))
+	@JsonIgnore
 	private Set<Tag> tags;
 	
 	private Date createDate;
