@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -75,9 +76,10 @@ public class StoryController {
 	
 	//TODO findByKeyword find story by name
 	
-	@RequestMapping("/findStoryByKeyword/{name_of_person}")
-	public Iterable<Story> findStoryByKeyword(String name_of_person) {
-		return repository.findStoryByKeyword(name_of_person);
+	@RequestMapping("/findStoriesByKeyword")
+	public Iterable<Story> findStoriesByKeyword(@RequestParam("name") String name_of_person) {
+		return repository.findStoriesByKeyword(name_of_person);
+		//return repository.findStoriesByKeyword();
 	}
 	
 	//TODO findMemoryTagsByStoryId
