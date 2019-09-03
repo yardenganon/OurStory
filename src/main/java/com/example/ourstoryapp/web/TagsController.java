@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ourstoryapp.da.TagRepository;
+import com.example.ourstoryapp.domain.Story;
 import com.example.ourstoryapp.domain.Tag;
 
 @RestController 
@@ -48,6 +50,13 @@ public class TagsController {
 	public ResponseEntity<Tag> findByid( @PathVariable(value = "id") String tag_name) {
 		return repository.findById(tag_name).map(record -> ResponseEntity.ok().body(record))
 				.orElse(ResponseEntity.notFound().build());
+	}
+	
+	
+	@RequestMapping("/findTop3TagsByStoryId")
+	public Iterable<String> findTop3TagsByStoryId(@RequestParam("storyId") long storyId) {
+		return repository.findTop3TagsByStoryId(storyId);
+		//return repository.findStoriesByKeyword();
 	}
 
 
