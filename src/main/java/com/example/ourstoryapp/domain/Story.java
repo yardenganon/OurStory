@@ -49,6 +49,12 @@ public class Story {
 			//this.picture = defualtProfilePicture;
 
 	}
+	public Story(Date date_of_birth) {
+		super();
+
+		this.date_of_birth = date_of_birth;
+
+	}
 
 	public Story() {
 		// TODO Auto-generated constructor stub

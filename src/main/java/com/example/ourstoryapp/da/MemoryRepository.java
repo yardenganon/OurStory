@@ -22,8 +22,11 @@ public interface MemoryRepository extends JpaRepository<Memory, Long> {
 	@Query(value = "SELECT MEMORY.* FROM TAG_IN_MEMORY INNER JOIN MEMORY on (MEMORY.memory_id=TAG_IN_MEMORY.memory_id) WHERE (Memory.story=?1 AND TAG_IN_MEMORY.tag_name=?2) ORDER BY Memory.memory_date DESC", nativeQuery = true)
 	List<Memory> findMemoriesByTag(long story, String t);
 
-	@Query(value = "SELECT MEMORY.* FROM Memory inner join Story on  Memory.story=Story.story_id WHERE (Memory.description LIKE CONCAT('%',?1,'%') OR Story.name_of_person LIKE CONCAT('%',?1,'%') OR Memory.location LIKE CONCAT('%',?1,'%')) ORDER BY Memory.memory_date DESC", nativeQuery = true)
+	@Query(value = "SELECT MEMORY.* FROM Memory inner join Story on  Memory.story=Story.story_id WHERE (Memory.description LIKE CONCAT('%',?1,'%') OR Story.name_of_person LIKE CONCAT('%',?1,'%') OR Memory.location LIKE CONCAT('%',?1,'%') OR ( CONCAT(EXTRACT (year FROM Memory.memory_date), '') LIKE CONCAT('%',?1,'%'))) ORDER BY Memory.memory_date DESC", nativeQuery = true)
 	List<Memory> findMemoriesByKeyword(String desc);
+	
+	
+	//get memories by words in description of memory
 
 }
  

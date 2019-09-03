@@ -81,6 +81,10 @@ public class OurstoryappApplication {
 			// m1.setLikes(setlikes);
 
 			// like_repository.save(l1);
+			
+			
+			Story s = new Story(new Date());
+			story_repository.save(s);
 
 
 		};

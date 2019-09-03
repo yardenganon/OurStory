@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
 import com.example.ourstoryapp.da.StoryRepository;
+import com.example.ourstoryapp.domain.Memory;
 import com.example.ourstoryapp.domain.Story;
 
 
@@ -47,12 +49,6 @@ public class StoryController {
 				.orElse(ResponseEntity.notFound().build());
 	}
 	
-	// get story by name_of_person (Read)
-//	@GetMapping("/stories/findByName/{id}")
-//	public ResponseEntity<Story> findByName(@PathVariable(value = "name_of_person") String storyName) {
-//		return repository.findByName(storyName).map(record -> ResponseEntity.ok().body(record))
-//				.orElse(ResponseEntity.notFound().build());
-//	}
 	
 	// delete story by ID (Delete)
 	@DeleteMapping("/delete/{id}")
@@ -77,5 +73,52 @@ public class StoryController {
 	            return ResponseEntity.ok().body(updated);
 	        }).orElse(ResponseEntity.notFound().build());
 	  }
-      
+	
+	//TODO findByKeyword find story by name
+	
+	@RequestMapping("/findStoriesByKeyword")
+	public Iterable<Story> findStoriesByKeyword(@RequestParam("name") String name_of_person) {
+		return repository.findStoriesByKeyword(name_of_person);
+	}
+	
+	//TODO findMemoryTagsByStoryId
+	@RequestMapping("/findStoriesByDobFull")
+	public Iterable<Story> findStoriesByDobFull(@RequestParam("d") int d,@RequestParam("m") int m,@RequestParam("y") int y) {
+		return repository.findStoriesByDobFull(d,m,y);
+	}
+	
+	
+	@RequestMapping("/findStoriesByDobYearMonth")
+	public Iterable<Story> findStoriesByDobYearMonth(@RequestParam("m") int m,@RequestParam("y") int y) {
+		return repository.findStoriesByDobYearMonth(m,y);
+	}
+	
+	@RequestMapping("/findStoriesByDobYear")
+	public Iterable<Story> findStoriesByDobYear(@RequestParam("y") int y) {
+		return repository.findStoriesByDobYear(y);
+	}
+	
+	
+	
+	@RequestMapping("/findStoriesByDodFull")
+	public Iterable<Story> findStoriesByDodFull(@RequestParam("d") int d,@RequestParam("m") int m,@RequestParam("y") int y) {
+		return repository.findStoriesByDodFull(d,m,y);
+	}
+	
+	
+	@RequestMapping("/findStoriesByDodYearMonth")
+	public Iterable<Story> findStoriesByDodYearMonth(@RequestParam("m") int m,@RequestParam("y") int y) {
+		return repository.findStoriesByDodYearMonth(m,y);
+	}
+	
+	@RequestMapping("/findStoriesByDodYear")
+	public Iterable<Story> findStoriesByDodYear(@RequestParam("y") int y) {
+		return repository.findStoriesByDodYear(y);
+	}
+	
+	
+	
+	
+	
+	
 }
