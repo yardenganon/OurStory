@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ourstoryapp.da.CommentRepository;
 import com.example.ourstoryapp.domain.Comment;
+import com.example.ourstoryapp.domain.Memory;
 
 
 @RestController
@@ -45,6 +46,12 @@ public class CommentController {
 			repository.deleteById(commentId);
 			return ResponseEntity.ok().build();
 		}).orElse(ResponseEntity.notFound().build());
+	}
+	
+	
+	@RequestMapping("/getMemoryComments/{id}")
+	public Iterable<Comment> getMemoryComments(@PathVariable("id") long memoryId) {
+		return repository.getMemoryComments(memoryId);
 	}
 
 }

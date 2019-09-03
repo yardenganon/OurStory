@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -20,10 +21,12 @@ public class Tag {
 
 	@ManyToMany(mappedBy = "tags")
 	@JsonManagedReference
+	@JsonIgnore
 	private Set<Memory> memories;
-
+	
 	@ManyToMany(mappedBy = "tags")
-	 @JsonManagedReference
+	@JsonManagedReference
+	@JsonIgnore
 	private Set<Comment> comments;
 
 	public Set<Memory> getMemories() {

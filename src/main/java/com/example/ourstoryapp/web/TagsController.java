@@ -56,7 +56,17 @@ public class TagsController {
 	@RequestMapping("/findTop3TagsByStoryId")
 	public Iterable<String> findTop3TagsByStoryId(@RequestParam("storyId") long storyId) {
 		return repository.findTop3TagsByStoryId(storyId);
-		//return repository.findStoriesByKeyword();
+	}
+	
+	
+	@RequestMapping("/findTop5TagsByStoryId")
+	public Iterable<String> findTop5TagsByStoryId(@RequestParam("storyId") long storyId) {
+		return repository.findTop5TagsByStoryId(storyId);
+	}
+	
+	@RequestMapping("/findTop10TagsByStoryId")
+	public Iterable<String> findTop10TagsByStoryId(@RequestParam("storyId") long storyId) {
+		return repository.findTop10TagsByStoryId(storyId);
 	}
 
 
