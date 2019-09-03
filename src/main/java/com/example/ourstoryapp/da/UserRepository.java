@@ -7,5 +7,7 @@ import com.example.ourstoryapp.domain.User;
 
 @RepositoryRestResource
  public interface UserRepository extends CrudRepository <User,Long> {
+	
+	/// get list of users by name
 
 }
