@@ -8,5 +8,8 @@ import com.example.ourstoryapp.domain.Tag;
 
 @RepositoryRestResource
 public interface MemTagRepository extends CrudRepository <Tag,String>{
+	
+	
+	
 
 }

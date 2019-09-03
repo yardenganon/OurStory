@@ -9,4 +9,6 @@ import com.example.ourstoryapp.domain.Likes;
 @RepositoryRestResource
 public interface LikesRepository extends JpaRepository <Likes,Long> {
 
+	
+
 }

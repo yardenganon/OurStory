@@ -8,5 +8,7 @@ import com.example.ourstoryapp.domain.Comment;
 
 @RepositoryRestResource
 public interface CommentRepository extends JpaRepository <Comment,Long> {
+	
+	// get list of comment by Memory ID
 
 }

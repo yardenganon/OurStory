@@ -9,4 +9,7 @@ import com.example.ourstoryapp.domain.Video;
 @RepositoryRestResource
 public interface VideoRepository extends JpaRepository <Video,URI>{
 
+	
+	
+	
 }
