@@ -1,5 +1,7 @@
 package com.example.ourstoryapp.web;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,13 @@ public class UserController {
  				.orElse(ResponseEntity.notFound().build());
  	}
  	
+ 	
+ 	// get user by Email
+ 	@GetMapping("/findByEmail/{email}")
+ 	public List<User> findByEmail(@PathVariable(value = "email") String userEmail) {
+ 		return repository.findByEmail(userEmail);
+ 	}
+ 
     // create new instance of User (Create)
  	@PostMapping("/create")
  	public User create(@Valid @RequestBody User user) {
