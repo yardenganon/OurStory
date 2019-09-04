@@ -25,9 +25,6 @@ public interface StoryRepository extends JpaRepository <Story ,Long> {
 	@Query(value = "SELECT Story.* FROM Story WHERE EXTRACT (year FROM Story.date_of_birth) = ?1", nativeQuery = true)
 	List<Story> findStoriesByDobYear(int y);
 	
-	
-	
-	
 	// find story by full date date of death
 	@Query(value = "SELECT Story.* FROM Story WHERE EXTRACT (day FROM Story.date_of_death) = ?1  AND EXTRACT (month FROM Story.date_of_death) = ?2 AND EXTRACT (year FROM Story.date_of_death) = ?3", nativeQuery = true)
 	List<Story> findStoriesByDodFull(int d, int m, int y);

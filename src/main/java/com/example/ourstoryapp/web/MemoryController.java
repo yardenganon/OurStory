@@ -1,9 +1,9 @@
 package com.example.ourstoryapp.web;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.domain.Memory;
-import com.example.ourstoryapp.domain.Tag;
+import com.example.ourstoryapp.service.LoggingController;
 
 @RestController
 @RequestMapping("/memories")
@@ -24,14 +24,17 @@ public class MemoryController {
 
 	@Autowired
 	MemoryRepository repository;
+	Logger logger = LogManager.getLogger(LoggingController.class);
 
 	@GetMapping("/findAll")
 	public Iterable<Memory> findAll() {
+		logger.info("Find All Memories");
 		return repository.findAll();
 	}
 
 	@PostMapping("/create")
 	public Memory create(@Valid @RequestBody Memory memory) {
+		
 		return repository.save(memory);
 	}
 

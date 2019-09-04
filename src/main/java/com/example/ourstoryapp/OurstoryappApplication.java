@@ -1,14 +1,9 @@
 package com.example.ourstoryapp;
 
-
-
-import java.net.URI;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.logging.LogManager;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,18 +15,12 @@ import com.example.ourstoryapp.da.LikesRepository;
 import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.da.StoryRepository;
 import com.example.ourstoryapp.da.TagRepository;
-import com.example.ourstoryapp.da.TagRepository;
 import com.example.ourstoryapp.da.UserRepository;
-import com.example.ourstoryapp.domain.Likes;
-import com.example.ourstoryapp.domain.Memory;
-import com.example.ourstoryapp.domain.Story;
-import com.example.ourstoryapp.domain.Tag;
-import com.example.ourstoryapp.domain.User;
 
 @SpringBootApplication
 public class OurstoryappApplication {
-	//test 2
-	//test
+	// test 2
+	// test
 	@Autowired
 	private StoryRepository story_repository;
 	@Autowired
@@ -45,13 +34,14 @@ public class OurstoryappApplication {
 	@Autowired
 	private TagRepository tag_repository;
 
-	private static final Logger logger = LoggerFactory.getLogger(OurstoryappApplication.class);
+//	private static final Logger logger = LoggerFactory.getLogger(OurstoryappApplication.class);
+//	Logger log = LogManager.getLogger(LoggingController.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(OurstoryappApplication.class, args);
 
 		// test
-		logger.info("Hello Spring Boot");
+	//	logger.info("Hello Spring Boot");
 	}
 
 	@Bean
@@ -82,12 +72,9 @@ public class OurstoryappApplication {
 			// m1.setLikes(setlikes);
 
 			// like_repository.save(l1);
-			
-			
-			Story s = new Story(new Date());
-			story_repository.save(s);
 
-
+			// Story s = new Story(new Date());
+			// story_repository.save(s);
 		};
 	}
 
