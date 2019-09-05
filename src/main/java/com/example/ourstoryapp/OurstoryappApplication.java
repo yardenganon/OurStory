@@ -1,9 +1,7 @@
 package com.example.ourstoryapp;
 
 import java.util.Date;
-import java.util.logging.LogManager;
 
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,6 +14,8 @@ import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.da.StoryRepository;
 import com.example.ourstoryapp.da.TagRepository;
 import com.example.ourstoryapp.da.UserRepository;
+import com.example.ourstoryapp.domain.Story;
+import com.example.ourstoryapp.domain.User;
 
 @SpringBootApplication
 public class OurstoryappApplication {
@@ -41,7 +41,7 @@ public class OurstoryappApplication {
 		SpringApplication.run(OurstoryappApplication.class, args);
 
 		// test
-	//	logger.info("Hello Spring Boot");
+		// logger.info("Hello Spring Boot");
 	}
 
 	@Bean
@@ -72,9 +72,11 @@ public class OurstoryappApplication {
 			// m1.setLikes(setlikes);
 
 			// like_repository.save(l1);
+			User u = new User();
+			user_repository.save(u);
 
-			// Story s = new Story(new Date());
-			// story_repository.save(s);
+			Story s = new Story(u, "fadi", new Date(), new Date(), null);
+			story_repository.save(s);
 		};
 	}
 

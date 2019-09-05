@@ -25,11 +25,9 @@ public class Story {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "owner")
-	@JsonIgnore
 	private User owner;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "story")
-	@JsonIgnore
 	private List<Memory> memories;
 	private String name_of_person;
 	private Date date_of_birth, date_of_death;
