@@ -28,12 +28,11 @@ public class Story {
 	private User owner;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "story")
+	@JsonIgnore
 	private List<Memory> memories;
 	private String name_of_person;
 	private Date date_of_birth, date_of_death;
 	private URI picture;
-
-
 
 	public Story(User owner, String name_of_person, Date date_of_birth, Date date_of_death, URI picture) {
 		super();
@@ -43,10 +42,11 @@ public class Story {
 		this.date_of_death = date_of_death;
 		if (picture != null)
 			this.picture = picture;
-		//else
-			//this.picture = defualtProfilePicture;
+		// else
+		// this.picture = defualtProfilePicture;
 
 	}
+
 	public Story(Date date_of_birth) {
 		super();
 
