@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ourstoryapp.da.UserRepository;
 import com.example.ourstoryapp.domain.User;
+import com.example.ourstoryapp.service.LoggingController;
 
 @RestController
 @RequestMapping("/users")
@@ -24,31 +27,48 @@ public class UserController {
 	
     @Autowired
 	private UserRepository repository;
+    Logger logger = LogManager.getLogger(LoggingController.class);
     
 
 	// get all users - sorted by ID (Read)
     @GetMapping("/findAll")
     public Iterable<User> getUser() {
-      return repository.findAll();
+    	logger.info("Find All Users");
+    	return repository.findAll();
     }
     
     // get user by ID (Read)
  	@GetMapping("/findById/{id}")
  	public ResponseEntity<User> findById(@PathVariable(value = "id") long userId) {
- 		return repository.findById(userId).map(record -> ResponseEntity.ok().body(record))
- 				.orElse(ResponseEntity.notFound().build());
+ 		if((repository.findById(userId).map(record -> ResponseEntity.ok().body(record))).isPresent()) {
+ 			logger.info("Find User By ID");
+ 			return repository.findById(userId).map(record -> ResponseEntity.ok().body(record))
+ 					.orElse(ResponseEntity.notFound().build());
+ 		}
+ 		else {
+ 			logger.info("User By ID Is Not Found");
+ 			return ResponseEntity.notFound().build();
+ 		}
  	}
  	
  	
  	// get user by Email
  	@GetMapping("/findByEmail/{email}")
  	public List<User> findByEmail(@PathVariable(value = "email") String userEmail) {
- 		return repository.findByEmail(userEmail);
+ 		if((repository.findByEmail(userEmail)).size()>0) {
+ 			logger.info("Find By Email");
+ 	 		return repository.findByEmail(userEmail);
+ 		}
+ 		else{
+ 			logger.info("Find By Email is not found");
+ 			return null;
+ 		}
  	}
  
     // create new instance of User (Create)
  	@PostMapping("/create")
  	public User create(@Valid @RequestBody User user) {
+ 		logger.info("Cretae User");
  		return repository.save(user);
  	}
  	
@@ -76,10 +96,16 @@ public class UserController {
 	// delete story by ID (Delete)
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long userId) {
-		return repository.findById(userId).map(record -> {
+		if((repository.findById(userId).map(record -> ResponseEntity.ok().body(record))).isPresent()) {
 			repository.deleteById(userId);
+			logger.info("Successfully deleted User");
 			return ResponseEntity.ok().build();
-		}).orElse(ResponseEntity.notFound().build());
+		}
+		
+		else {
+			logger.info("User is not existing");
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 }
