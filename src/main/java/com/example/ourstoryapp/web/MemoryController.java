@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.domain.Memory;
-import com.example.ourstoryapp.service.LoggingController;
 
 @RestController
 @RequestMapping("/memories")
@@ -24,7 +23,7 @@ public class MemoryController {
 
 	@Autowired
 	MemoryRepository repository;
-	Logger logger = LogManager.getLogger(LoggingController.class);
+	Logger logger = LogManager.getLogger(MemoryController.class);
 
 	@GetMapping("/findAll")
 	public Iterable<Memory> findAll() {
@@ -34,7 +33,7 @@ public class MemoryController {
 
 	@PostMapping("/create")
 	public Memory create(@Valid @RequestBody Memory memory) {
-		
+
 		return repository.save(memory);
 	}
 
