@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ourstoryapp.da.TagRepository;
-import com.example.ourstoryapp.domain.Story;
 import com.example.ourstoryapp.domain.Tag;
-import com.example.ourstoryapp.service.LoggingController;
 
 @RestController 
 @RequestMapping("/tags")
@@ -26,7 +24,7 @@ public class TagsController {
 
 	@Autowired
     private TagRepository repository;
-	Logger logger = LogManager.getLogger(LoggingController.class);
+	Logger logger = LogManager.getLogger(TagsController.class);
 
 	//return all tags	
 	@RequestMapping("/findAll")
