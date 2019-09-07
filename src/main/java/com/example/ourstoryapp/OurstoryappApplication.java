@@ -72,11 +72,11 @@ public class OurstoryappApplication {
 			// m1.setLikes(setlikes);
 
 			// like_repository.save(l1);
-			User u = new User();
-			user_repository.save(u);
-
-			Story s = new Story(u, "fadi", new Date(), new Date(), null);
-			story_repository.save(s);
+//			User u = new User();
+//			user_repository.save(u);
+//
+//			Story s = new Story(u, "fadi", new Date(), new Date(), null);
+//			story_repository.save(s);
 		};
 	}
 

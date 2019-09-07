@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ourstoryapp.da.UserRepository;
 import com.example.ourstoryapp.domain.User;
-import com.example.ourstoryapp.mail.EmailSenderService;
+import com.example.ourstoryapp.mail.MailClient;
 
 @RestController
 @RequestMapping("/users")
@@ -34,8 +33,7 @@ public class UserController {
 	Logger logger = LogManager.getLogger(UserController.class);
 
 	@Autowired
-	private EmailSenderService emailSenderService;
-
+	private MailClient mailClient;
 
 	// get all users - sorted by ID (Read)
 	@GetMapping("/findAll")
@@ -102,19 +100,15 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
-	public String createMail(@RequestParam("mail") String mail) {
+	@RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
+	public void resetPassword(@RequestParam("mail") String mail) {
 		User u = findByEmail(mail);
 		updatePassword(u.getUser_id());
 		u = findByEmail(mail);
-		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setTo("frouhana@outlook.com");
-		mailMessage.setSubject("New Password!");
-		mailMessage.setFrom("app.ourstory@gmail.com");
-		mailMessage.setText(
-				"To enter your account, please use this password : " + u.getPassword());
-		emailSenderService.sendEmail(mailMessage);
-		return "redirect:/home";
+		//don't forget to update to mail parameter
+		String recipient = "frouhana@outlook.com";
+		String message = u.getPassword();
+		mailClient.prepareAndSend(recipient, message);
 	}
 
 }
