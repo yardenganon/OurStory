@@ -33,42 +33,96 @@ public class MemoryController {
 
 	@PostMapping("/create")
 	public Memory create(@Valid @RequestBody Memory memory) {
-
+		logger.info("Create Memory");
 		return repository.save(memory);
 	}
 
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Memory> findById(@PathVariable(value = "id") long memoryId) {
-		return repository.findById(memoryId).map(record -> ResponseEntity.ok().body(record))
-				.orElse(ResponseEntity.notFound().build());
+		if(repository.findById(memoryId).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
+			logger.info("Find Memory By ID");
+			return repository.findById(memoryId).map(record -> ResponseEntity.ok().body(record))
+					.orElse(ResponseEntity.notFound().build());
+		}
+		else {
+			logger.info("Memory By ID is not Existing");
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long memoryId) {
-		return repository.findById(memoryId).map(record -> {
-			repository.deleteById(memoryId);
-			return ResponseEntity.ok().build();
-		}).orElse(ResponseEntity.notFound().build());
+		if(repository.findById(memoryId).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
+			logger.info("Successfully Deleted Memory");
+			return repository.findById(memoryId).map(record -> {
+				repository.deleteById(memoryId);
+				return ResponseEntity.ok().build();
+			}).orElse(ResponseEntity.notFound().build());
+		}
+		else {
+			logger.info("Memory is not existing");
+			return ResponseEntity.notFound().build();
+		}
+
 	}
 
 	@RequestMapping("/getUserMemories/{id}")
 	public Iterable<Memory> getUserMemories(@PathVariable long id) {
-		return repository.getUserMemories(id);
+		if(repository.getUserMemories(id)!= null) {
+			logger.info("Get User's Memories");
+			return repository.getUserMemories(id);
+		}
+		else {
+			logger.info("User's Memories Are Not Found");
+			return repository.getUserMemories(id);
+		}
 	}
 
 	@RequestMapping("story/{story}/findMemoriesByYear/{year}")
 	public Iterable<Memory> findMemoriesByYear(@PathVariable long story, @PathVariable int year) {
+		/*
+		if(repository.findMemoriesByYear(story, year)!=null) {
+			logger.info("Find Memories By Year");
+			return repository.findMemoriesByYear(story, year);
+
+		}
+		else {
+			logger.info("There Aren't Memories By Year");
+			return repository.findMemoriesByYear(story, year);
+		}
+		*/
 		return repository.findMemoriesByYear(story, year);
+
 	}
 
 	@RequestMapping("story/{story}/findMemoriesByTag/{tag}")
 	public Iterable<Memory> findMemoriesByTag(@PathVariable long story, @PathVariable String tag) {
+		/*
+		 if(repository.findMemoriesByTag(story, tag) != null) {
+			logger.info("Find Memories By Tag");
+			return repository.findMemoriesByTag(story, tag);
+		}
+		else {
+			logger.info("There Aren't Memories By Tag");
+			return repository.findMemoriesByTag(story, tag);
+		}
+		*/
 		return repository.findMemoriesByTag(story, tag);
 	}
 
 	@RequestMapping("/findMemoriesByKeyword/{description}")
 	public Iterable<Memory> findMemoriesByKeyword(String description) {
+		/*
+		if(repository.findMemoriesByKeyword(description) != null) {
+			logger.info("Find Memories By Keyword");
+			return repository.findMemoriesByKeyword(description);
+		}
+		else {
+			logger.info("There Aren't Memories By Keyword");
+			return repository.findMemoriesByKeyword(description);
+		}
+		*/
 		return repository.findMemoriesByKeyword(description);
-	}
 
+	}
 }
