@@ -1,5 +1,6 @@
 package com.example.ourstoryapp.web;
 
+import java.util.Date;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.ourstoryapp.da.LogRepository;
 import com.example.ourstoryapp.da.UserRepository;
+import com.example.ourstoryapp.domain.AppLogs;
 import com.example.ourstoryapp.domain.User;
 
 @RestController
@@ -27,12 +30,16 @@ public class UserController {
 
 	@Autowired
 	private UserRepository repository;
+	@Autowired
+	private LogRepository logRepository;
 	Logger logger = LogManager.getLogger(UserController.class);
+	final String name = UserController.class.getName();
 
 	// get all users - sorted by ID (Read)
 	@GetMapping("/findAll")
 	public Iterable<User> getUser() {
-		logger.info("Find All Users");
+		// logger.info("Find All Users");
+		logRepository.save(new AppLogs(new Date(), name, "Find All Users"));
 		return repository.findAll();
 	}
 
@@ -68,16 +75,16 @@ public class UserController {
 		return repository.save(user);
 	}
 
-	@PutMapping(value="/updatePassword")
-	public ResponseEntity<User> updatePassword(@PathVariable("id") long id){
-		    return repository.findById(id)
-		        .map(record -> {
-		        	String password = new Random().ints(10, 33, 122).mapToObj(i -> String.valueOf((char)i)).collect(Collectors.joining());
-		            record.setPassword(password);
-		            User updated = repository.save(record);
-		            return ResponseEntity.ok().body(updated);
-		        }).orElse(ResponseEntity.notFound().build());
-	}     
+	@PutMapping(value = "/updatePassword")
+	public ResponseEntity<User> updatePassword(@PathVariable("id") long id) {
+		return repository.findById(id).map(record -> {
+			String password = new Random().ints(10, 33, 122).mapToObj(i -> String.valueOf((char) i))
+					.collect(Collectors.joining());
+			record.setPassword(password);
+			User updated = repository.save(record);
+			return ResponseEntity.ok().body(updated);
+		}).orElse(ResponseEntity.notFound().build());
+	}
 
 	// delete story by ID (Delete)
 	@DeleteMapping("/delete/{id}")
