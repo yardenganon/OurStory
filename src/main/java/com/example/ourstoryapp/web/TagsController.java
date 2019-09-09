@@ -1,5 +1,7 @@
 package com.example.ourstoryapp.web;
 
+import java.util.Date;
+
 import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.ourstoryapp.da.LogRepository;
 import com.example.ourstoryapp.da.TagRepository;
+import com.example.ourstoryapp.domain.AppLogs;
 import com.example.ourstoryapp.domain.Tag;
 
 @RestController 
@@ -24,12 +28,15 @@ public class TagsController {
 
 	@Autowired
     private TagRepository repository;
+	@Autowired
+	private LogRepository logRepository;
 	Logger logger = LogManager.getLogger(TagsController.class);
+	final String name = TagsController.class.getName();
 
 	//return all tags	
 	@RequestMapping("/findAll")
 	public Iterable<Tag> getTags() {
-		logger.info("Find All Tags");
+		logRepository.save(new AppLogs(new Date(), name,"Find All Tags"));
 		return repository.findAll();
     } 
 	
@@ -37,14 +44,14 @@ public class TagsController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") String tag_name) {
 		if((repository.findById(tag_name)).isPresent()) {
-			logger.info("Successfully Deleted Tag");
+			logRepository.save(new AppLogs(new Date(), name,"Successfully Deleted Tag"));
 			return repository.findById(tag_name).map(record -> {
 			repository.deleteById(tag_name);
 			return ResponseEntity.ok().build();
 		}).orElse(ResponseEntity.notFound().build());
 		}
 		else {
-			logger.info("Tag is not existing");
+			logRepository.save(new AppLogs(new Date(), name,"Tag is not existing"));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -52,7 +59,7 @@ public class TagsController {
 	//add tag
 	@PostMapping("/create")
 	public Tag create(@Valid @RequestBody Tag tag) {
-		logger.info("Create Tag");
+		logRepository.save(new AppLogs(new Date(), name,"Create Tag"));
 		return repository.save(tag);	
 	}
 	
@@ -60,32 +67,32 @@ public class TagsController {
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Tag> findByid( @PathVariable(value = "id") String tag_name) {
 		if((repository.findById(tag_name)).isPresent()) {
-			logger.info("Find Tag by Name");
+			logRepository.save(new AppLogs(new Date(), name,"Find Tag by Name"));
 			return repository.findById(tag_name).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		}
 		else {
-			logger.info("Tag by Name in not existing");
+			logRepository.save(new AppLogs(new Date(), name,"Tag by Name in not existing"));
 			return ResponseEntity.notFound().build();
 		}
 	}
 	
 	@RequestMapping("/findTop3TagsByStoryId")
 	public Iterable<String> findTop3TagsByStoryId(@RequestParam("storyId") long storyId) {
-		logger.info("Find Top 3 Tags By Story Id");
+		logRepository.save(new AppLogs(new Date(), name,"Find Top 3 Tags By Story Id"));
 		return repository.findTop3TagsByStoryId(storyId);
 	}
 	
 	
 	@RequestMapping("/findTop5TagsByStoryId")
 	public Iterable<String> findTop5TagsByStoryId(@RequestParam("storyId") long storyId) {
-		logger.info("Find Top 5 Tags By Story Id");
+		logRepository.save(new AppLogs(new Date(), name,"Find Top 5 Tags By Story Id"));
 		return repository.findTop5TagsByStoryId(storyId);
 	}
 	
 	@RequestMapping("/findTop10TagsByStoryId")
 	public Iterable<String> findTop10TagsByStoryId(@RequestParam("storyId") long storyId) {
-		logger.info("Find Top 10 Tags By Story Id");
+		logRepository.save(new AppLogs(new Date(), name,"Find Top 10 Tags By Story Id"));
 		return repository.findTop10TagsByStoryId(storyId);
 	}
 }

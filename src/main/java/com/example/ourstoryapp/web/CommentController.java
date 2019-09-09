@@ -1,5 +1,6 @@
 package com.example.ourstoryapp.web;
 
+import java.util.Date;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ourstoryapp.da.CommentRepository;
+import com.example.ourstoryapp.da.LogRepository;
+import com.example.ourstoryapp.domain.AppLogs;
 import com.example.ourstoryapp.domain.Comment;
 import com.example.ourstoryapp.domain.Memory;
 //import com.example.ourstoryapp.service.LoggingController;
@@ -28,29 +31,33 @@ public class CommentController {
 
 	@Autowired
 	CommentRepository repository;
-    Logger logger = LogManager.getLogger(CommentController.class);
+	@Autowired
+	private LogRepository logRepository;
 
+	final String name = CommentController.class.getName();
+	
+	
 	@GetMapping("/findAll")
 	public Iterable<Comment> findAll() {
-		logger.info("Find All Comments");
+		logRepository.save(new AppLogs(new Date(), name,"Find All Comments"));
 		return repository.findAll();
 	}
 
 	@PostMapping("/create")
 	public Comment create(@Valid @RequestBody Comment comment) {
-		logger.info("Cretae Comment");
+		logRepository.save(new AppLogs(new Date(), name,"Cretae Comment"));
 		return repository.save(comment);
 	}
 
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Comment> findById(@PathVariable(value = "id") long commentId) {
 		if((repository.findById(commentId).map(record -> ResponseEntity.ok().body(record))).isPresent()) {
-			logger.info("Find Comment By ID");
+			logRepository.save(new AppLogs(new Date(), name,"Find Comment By ID"));
 			return repository.findById(commentId).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		}
 		else {
-			logger.info("Comment By ID Is Not Found");
+			logRepository.save(new AppLogs(new Date(), name,"Comment By ID Is Not Found"));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -60,13 +67,13 @@ public class CommentController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long commentId) {
 		if((repository.findById(commentId).map(record -> ResponseEntity.ok().body(record))).isPresent()) {
-			logger.info("Successfully Deleted Comment");
+			logRepository.save(new AppLogs(new Date(), name,"Successfully Deleted Comment"));
 			repository.deleteById(commentId);
 			return ResponseEntity.ok().build();
 			
 		}
 		else {
-			logger.info("Comment is not existing");
+			logRepository.save(new AppLogs(new Date(), name,"Comment is not existing"));
 			return ResponseEntity.notFound().build();
 		}
 		}
@@ -74,11 +81,11 @@ public class CommentController {
 	@RequestMapping("/getMemoryComments/{id}")
 	public Iterable<Comment> getMemoryComments(@PathVariable("id") long memoryId) {
 		if((repository.getMemoryComments(memoryId))!=null) {
-			logger.info("Find Memory Comments By ID");
+			logRepository.save(new AppLogs(new Date(), name,"Find Memory Comments By ID"));
 			return repository.getMemoryComments(memoryId);
 		}
 		else {
-			logger.info("Memory Comments By ID is Not Existing");
+			logRepository.save(new AppLogs(new Date(), name,"Memory Comments By ID is Not Existing"));
 			return repository.getMemoryComments(memoryId);
 		}
 	}
