@@ -8,7 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class AppLogs {
 	@Id
-	private Date time;
+	private Date time; 
 	private String sourceClass;
 	private String description;
 
