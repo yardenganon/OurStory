@@ -1,6 +1,7 @@
 package com.example.ourstoryapp.web;
 
 import java.net.URI;
+import java.util.Date;
 
 import javax.validation.Valid;
 
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.ourstoryapp.da.LogRepository;
 import com.example.ourstoryapp.da.PictureRepository;
+import com.example.ourstoryapp.domain.AppLogs;
 import com.example.ourstoryapp.domain.Picture;
 
 @RestController
@@ -25,29 +28,31 @@ public class PictureController {
 
 	@Autowired
 	PictureRepository repository;
-    Logger logger = LogManager.getLogger(PictureController.class);
+	@Autowired
+	private LogRepository logRepository;
 
+	final String name = PictureController.class.getName();
 	@GetMapping("/findAll")
 	public Iterable<Picture> findAll() {
-		logger.info("Find All Pictures");
+		logRepository.save(new AppLogs(new Date(), name,"Find All Pictures"));
 		return repository.findAll();
 	}
 
 	@PostMapping("/create")
 	public Picture create(@Valid @RequestBody Picture picture) {
-		logger.info("Cretae Picture");
+		logRepository.save(new AppLogs(new Date(), name,"Cretae Picture"));
 		return repository.save(picture);
 	}
 
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Picture> findById(@PathVariable(value = "id") URI pictureId) {
 		if(repository.findById(pictureId).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
-			logger.info("Find Pictrure By ID");
+			logRepository.save(new AppLogs(new Date(), name,"Find Pictrure By ID"));
 			return repository.findById(pictureId).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		}
 		else {
-			logger.info("Picture By ID Is Not Found");
+			logRepository.save(new AppLogs(new Date(), name,"Picture By ID Is Not Found"));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -55,14 +60,14 @@ public class PictureController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") URI pictureId) {
 		if(repository.findById(pictureId).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
-			logger.info("Successfully Deleted Picture");
+			logRepository.save(new AppLogs(new Date(), name,"Successfully Deleted Picture"));
 			return repository.findById(pictureId).map(record -> {
 				repository.deleteById(pictureId);
 				return ResponseEntity.ok().build();
 			}).orElse(ResponseEntity.notFound().build());
 		}
 		else {
-			logger.info("Picture Is Not Existing");
+			logRepository.save(new AppLogs(new Date(), name,"Picture Is Not Existing"));
 			return ResponseEntity.notFound().build();
 		}
 	}

@@ -1,9 +1,9 @@
 package com.example.ourstoryapp.web;
 
+import java.util.Date;
+
 import javax.validation.Valid;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,130 +16,132 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.example.ourstoryapp.da.LogRepository;
 import com.example.ourstoryapp.da.StoryRepository;
-import com.example.ourstoryapp.domain.Memory;
+import com.example.ourstoryapp.domain.AppLogs;
 import com.example.ourstoryapp.domain.Story;
-
 
 @RestController
 @RequestMapping("/stories")
 public class StoryController {
-	
-	@Autowired
-	StoryRepository repository; 
-	Logger logger = LogManager.getLogger(StoryController.class);
 
-	
+	@Autowired
+	StoryRepository repository;
+	@Autowired
+	private LogRepository logRepository;
+
+	final String name = StoryController.class.getName();
+
 	// Basic CRUD
-	
+
 	// get all stories - sorted by ID (Read)
-    @GetMapping("/findAll")
-    public Iterable<Story> getStories() {
-    	logger.info("Find All Stories");
-    	return repository.findAll();
-    }
-    
-    // create new instance of Story (Create)
+	@GetMapping("/findAll")
+	public Iterable<Story> getStories() {
+		logRepository.save(new AppLogs(new Date(), name, "Find All Stories"));
+		return repository.findAll();
+	}
+
+	// create new instance of Story (Create)
 	@PostMapping("/create")
 	public Story create(@Valid @RequestBody Story story) {
-		logger.info("Create Story");
+		logRepository.save(new AppLogs(new Date(), name, "Create Story"));
 		return repository.save(story);
 	}
 
 	// get story by ID (Read)
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Story> findById(@PathVariable(value = "id") long storyId) {
-		if((repository.findById(storyId).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
-			logger.info("Find Story By ID");
+		if ((repository.findById(storyId).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
+			logRepository.save(new AppLogs(new Date(), name, "Find Story By ID"));
 			return repository.findById(storyId).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
-		}
-		else {
-			logger.info("Story by Id is not found");
+		} else {
+			logRepository.save(new AppLogs(new Date(), name, "Story by Id is not found"));
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
-	
+
 	// delete story by ID (Delete)
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long storyId) {
-		if((repository.findById(storyId).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
-			logger.info("Successfully deleted Story");
+		if ((repository.findById(storyId).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
+			logRepository.save(new AppLogs(new Date(), name, "Successfully deleted Story"));
 			return repository.findById(storyId).map(record -> {
 				repository.deleteById(storyId);
 				return ResponseEntity.ok().build();
 			}).orElse(ResponseEntity.notFound().build());
-		}
-		else {
-			logger.info("Story is not existing");
+		} else {
+			logRepository.save(new AppLogs(new Date(), name, "Story is not existing"));
 			return ResponseEntity.notFound().build();
 		}
 
 	}
-	
+
 	// update story by id using new values (Update)
-	@PutMapping(value="/{id}")
-	  public ResponseEntity<Story> update(@PathVariable("id") long storyId,
-	                                        @RequestBody Story story){
-	//	if((repository.findById(storyId).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
-			logger.info("Story has been updated");
-			 return repository.findById(storyId)
-	        .map(record -> {
-	            record.setDate_of_birth(story.getDate_of_birth());
-	            record.setDate_of_death(story.getDate_of_death());
-	            record.setName_of_person(story.getName_of_person());
-	            record.setPicture(story.getPicture());
-	            Story updated = repository.save(record);
-	            return ResponseEntity.ok().body(updated);
-	        }).orElse(ResponseEntity.notFound().build());
-//		}
-//		else {
-//			logger.info("There is nothing to update in the story");
-//			return ResponseEntity.notFound().build();
-//		}
-	  }
-	
-	//TODO findByKeyword find story by name
-	
+	@PutMapping(value = "/update/{id}")
+	public ResponseEntity<Story> update(@PathVariable("id") long storyId, @RequestBody Story story) {
+		logRepository.save(new AppLogs(new Date(), name, "story update"));
+		return repository.findById(storyId).map(record -> {
+			record.setDate_of_birth(story.getDate_of_birth());
+			record.setDate_of_death(story.getDate_of_death());
+			record.setName_of_person(story.getName_of_person());
+			record.setPicture(story.getPicture());
+			Story updated = repository.save(record);
+			return ResponseEntity.ok().body(updated);
+		}).orElse(ResponseEntity.notFound().build());
+	}
+
+	// TODO findByKeyword find story by name
+
 	@RequestMapping("/findStoriesByKeyword")
 	public Iterable<Story> findStoriesByKeyword(@RequestParam("name") String name_of_person) {
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByKeyword"));
+
 		return repository.findStoriesByKeyword(name_of_person);
 	}
-	
-	//TODO findMemoryTagsByStoryId
+
+	// TODO findMemoryTagsByStoryId
 	@RequestMapping("/findStoriesByDobFull")
-	public Iterable<Story> findStoriesByDobFull(@RequestParam("d") int d,@RequestParam("m") int m,@RequestParam("y") int y) {
-		return repository.findStoriesByDobFull(d,m,y);
+	public Iterable<Story> findStoriesByDobFull(@RequestParam("d") int d, @RequestParam("m") int m,
+			@RequestParam("y") int y) {
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDobFull"));
+
+		return repository.findStoriesByDobFull(d, m, y);
 	}
-	
-	
+
 	@RequestMapping("/findStoriesByDobYearMonth")
-	public Iterable<Story> findStoriesByDobYearMonth(@RequestParam("m") int m,@RequestParam("y") int y) {
-		return repository.findStoriesByDobYearMonth(m,y);
+	public Iterable<Story> findStoriesByDobYearMonth(@RequestParam("m") int m, @RequestParam("y") int y) {
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDobYearMonth"));
+
+		return repository.findStoriesByDobYearMonth(m, y);
 	}
-	
+
 	@RequestMapping("/findStoriesByDobYear")
 	public Iterable<Story> findStoriesByDobYear(@RequestParam("y") int y) {
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDobYear"));
+
 		return repository.findStoriesByDobYear(y);
 	}
-	
-	
-	
+
 	@RequestMapping("/findStoriesByDodFull")
-	public Iterable<Story> findStoriesByDodFull(@RequestParam("d") int d,@RequestParam("m") int m,@RequestParam("y") int y) {
-		return repository.findStoriesByDodFull(d,m,y);
+	public Iterable<Story> findStoriesByDodFull(@RequestParam("d") int d, @RequestParam("m") int m,
+			@RequestParam("y") int y) {
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDodFull"));
+
+		return repository.findStoriesByDodFull(d, m, y);
 	}
-	
-	
+
 	@RequestMapping("/findStoriesByDodYearMonth")
-	public Iterable<Story> findStoriesByDodYearMonth(@RequestParam("m") int m,@RequestParam("y") int y) {
-		return repository.findStoriesByDodYearMonth(m,y);
+	public Iterable<Story> findStoriesByDodYearMonth(@RequestParam("m") int m, @RequestParam("y") int y) {
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDodYearMonth"));
+
+		return repository.findStoriesByDodYearMonth(m, y);
 	}
-	
+
 	@RequestMapping("/findStoriesByDodYear")
 	public Iterable<Story> findStoriesByDodYear(@RequestParam("y") int y) {
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDodYear"));
+
 		return repository.findStoriesByDodYear(y);
-	}	
+	}
 }

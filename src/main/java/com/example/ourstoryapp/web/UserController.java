@@ -17,12 +17,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ourstoryapp.da.LogRepository;
 import com.example.ourstoryapp.da.UserRepository;
 import com.example.ourstoryapp.domain.AppLogs;
 import com.example.ourstoryapp.domain.User;
+import com.example.ourstoryapp.mail.MailClient;
 
 @RestController
 @RequestMapping("/users")
@@ -33,7 +36,10 @@ public class UserController {
 	@Autowired
 	private LogRepository logRepository;
 	Logger logger = LogManager.getLogger(UserController.class);
+
 	final String name = UserController.class.getName();
+	@Autowired
+	private MailClient mailClient;
 
 	// get all users - sorted by ID (Read)
 	@GetMapping("/findAll")
@@ -99,6 +105,17 @@ public class UserController {
 			logger.info("User is not existing");
 			return ResponseEntity.notFound().build();
 		}
+	}
+
+	@RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
+	public void resetPassword(@RequestParam("mail") String mail) {
+		User u = findByEmail(mail);
+		updatePassword(u.getUser_id());
+		u = findByEmail(mail);
+		// don't forget to update to mail parameter
+		String recipient = "frouhana@outlook.com";
+		String message = u.getPassword();
+		mailClient.prepareAndSend(recipient, message);
 	}
 
 }
