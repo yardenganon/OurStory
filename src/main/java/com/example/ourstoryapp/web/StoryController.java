@@ -2,6 +2,8 @@ package com.example.ourstoryapp.web;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,44 +28,64 @@ public class StoryController {
 	
 	@Autowired
 	StoryRepository repository; 
-	
+	Logger logger = LogManager.getLogger(StoryController.class);
+
 	
 	// Basic CRUD
 	
 	// get all stories - sorted by ID (Read)
     @GetMapping("/findAll")
     public Iterable<Story> getStories() {
-      return repository.findAll();
+    	logger.info("Find All Stories");
+    	return repository.findAll();
     }
     
     // create new instance of Story (Create)
 	@PostMapping("/create")
 	public Story create(@Valid @RequestBody Story story) {
+		logger.info("Create Story");
 		return repository.save(story);
 	}
 
 	// get story by ID (Read)
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Story> findById(@PathVariable(value = "id") long storyId) {
-		return repository.findById(storyId).map(record -> ResponseEntity.ok().body(record))
-				.orElse(ResponseEntity.notFound().build());
+		if((repository.findById(storyId).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
+			logger.info("Find Story By ID");
+			return repository.findById(storyId).map(record -> ResponseEntity.ok().body(record))
+					.orElse(ResponseEntity.notFound().build());
+		}
+		else {
+			logger.info("Story by Id is not found");
+			return ResponseEntity.notFound().build();
+		}
 	}
 	
 	
 	// delete story by ID (Delete)
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long storyId) {
-		return repository.findById(storyId).map(record -> {
-			repository.deleteById(storyId);
-			return ResponseEntity.ok().build();
-		}).orElse(ResponseEntity.notFound().build());
+		if((repository.findById(storyId).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
+			logger.info("Successfully deleted Story");
+			return repository.findById(storyId).map(record -> {
+				repository.deleteById(storyId);
+				return ResponseEntity.ok().build();
+			}).orElse(ResponseEntity.notFound().build());
+		}
+		else {
+			logger.info("Story is not existing");
+			return ResponseEntity.notFound().build();
+		}
+
 	}
 	
 	// update story by id using new values (Update)
 	@PutMapping(value="/{id}")
 	  public ResponseEntity<Story> update(@PathVariable("id") long storyId,
 	                                        @RequestBody Story story){
-	    return repository.findById(storyId)
+	//	if((repository.findById(storyId).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
+			logger.info("Story has been updated");
+			 return repository.findById(storyId)
 	        .map(record -> {
 	            record.setDate_of_birth(story.getDate_of_birth());
 	            record.setDate_of_death(story.getDate_of_death());
@@ -72,6 +94,11 @@ public class StoryController {
 	            Story updated = repository.save(record);
 	            return ResponseEntity.ok().body(updated);
 	        }).orElse(ResponseEntity.notFound().build());
+//		}
+//		else {
+//			logger.info("There is nothing to update in the story");
+//			return ResponseEntity.notFound().build();
+//		}
 	  }
 	
 	//TODO findByKeyword find story by name
@@ -114,11 +141,5 @@ public class StoryController {
 	@RequestMapping("/findStoriesByDodYear")
 	public Iterable<Story> findStoriesByDodYear(@RequestParam("y") int y) {
 		return repository.findStoriesByDodYear(y);
-	}
-	
-	
-	
-	
-	
-	
+	}	
 }
