@@ -35,7 +35,6 @@ public class UserController {
 	private UserRepository repository;
 	@Autowired
 	private LogRepository logRepository;
-	Logger logger = LogManager.getLogger(UserController.class);
 
 	final String name = UserController.class.getName();
 	@Autowired
@@ -44,7 +43,6 @@ public class UserController {
 	// get all users - sorted by ID (Read)
 	@GetMapping("/findAll")
 	public Iterable<User> getUser() {
-		// logger.info("Find All Users");
 		logRepository.save(new AppLogs(new Date(), name, "Find All Users"));
 		return repository.findAll();
 	}
