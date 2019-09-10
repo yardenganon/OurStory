@@ -30,30 +30,25 @@ public class VideoController {
 	VideoRepository repository;
 	@Autowired
 	private LogRepository logRepository;
-    Logger logger = LogManager.getLogger(VideoController.class);
 	 final String name = VideoController.class.getName();
 	 
 	@GetMapping("/findAll")
 	public Iterable<Video> findAll() {
-		logRepository.save(new AppLogs(new Date(), name, "Find All Videos"));
 		return repository.findAll();
 	}
 
 	@PostMapping("/create")
 	public Video create(@Valid @RequestBody Video video) {
-		logRepository.save(new AppLogs(new Date(), name, "Create Video"));
 		return repository.save(video);
 	}
 
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Video> findById(@PathVariable(value = "id") URI videoId) {
 		if(repository.findById(videoId).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
-			logRepository.save(new AppLogs(new Date(), name, "Find Video By ID"));
 			return repository.findById(videoId).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		}
 		else {
-			logRepository.save(new AppLogs(new Date(), name, "Video By ID Is Not Existing"));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -61,14 +56,12 @@ public class VideoController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") URI videoId) {
 		if(repository.findById(videoId).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
-			logRepository.save(new AppLogs(new Date(), name, "Successfully Deleted Video"));
 			return repository.findById(videoId).map(record -> {
 				repository.deleteById(videoId);
 				return ResponseEntity.ok().build();
 			}).orElse(ResponseEntity.notFound().build());
 		}
 		else {
-			logRepository.save(new AppLogs(new Date(), name, "Video Is Not Existing"));
 			return ResponseEntity.notFound().build();
 		}
 

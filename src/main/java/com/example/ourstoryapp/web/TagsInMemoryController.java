@@ -34,7 +34,6 @@ public class TagsInMemoryController {
 	// return all tags
 	@RequestMapping("/findAll")
 	public Iterable<Tag> getmemTags() {
-		logRepository.save(new AppLogs(new Date(), name, "Find All Tags in Memory"));
 		return mem_tags_repository.findAll();
 	}
 
@@ -42,13 +41,11 @@ public class TagsInMemoryController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> deletememtag(@PathVariable("id") String tag_name) {
 		if ((mem_tags_repository.findById(tag_name).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
-			logRepository.save(new AppLogs(new Date(), name,"Successfully Deleted Tag in Memory"));
 			return mem_tags_repository.findById(tag_name).map(record -> {
 				mem_tags_repository.deleteById(tag_name);
 				return ResponseEntity.ok().build();
 			}).orElse(ResponseEntity.notFound().build());
 		} else {
-			logRepository.save(new AppLogs(new Date(), name,"Tag in memory is not existing"));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -56,7 +53,6 @@ public class TagsInMemoryController {
 	// add tag
 	@PostMapping("/create")
 	public Tag Create(@Valid @RequestBody Tag tag) {
-		logRepository.save(new AppLogs(new Date(), name,"Create New Tag in Memory"));
 		return mem_tags_repository.save(tag);
 	}
 
@@ -64,11 +60,9 @@ public class TagsInMemoryController {
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Tag> findbyid(@PathVariable(value = "id") String tag_name) {
 		if ((mem_tags_repository.findById(tag_name).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
-			logRepository.save(new AppLogs(new Date(), name,"Find Tag in Memory by ID"));
 			return mem_tags_repository.findById(tag_name).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		} else {
-			logRepository.save(new AppLogs(new Date(), name,"Tag in Memrory is not existing"));
 			return ResponseEntity.notFound().build();
 		}
 	}
