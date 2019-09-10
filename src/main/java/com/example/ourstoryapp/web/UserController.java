@@ -118,7 +118,7 @@ public class UserController {
 		updatePassword(u.getUser_id());
 		u = findByEmail(mail);
 		// don't forget to update to mail parameter
-		String recipient = "frouhana@outlook.com";
+		String recipient = mail;
 		String message = u.getPassword();
 		mailClient.prepareAndSend(recipient, message);
 	}
