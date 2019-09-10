@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.ourstoryapp.da.LogRepository;
 import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.domain.AppLogs;
+import com.example.ourstoryapp.domain.LogStatus;
 import com.example.ourstoryapp.domain.Memory;
 
 @RestController
@@ -33,24 +34,24 @@ public class MemoryController {
 
 	@GetMapping("/findAll")
 	public Iterable<Memory> findAll() {
-		logRepository.save(new AppLogs(new Date(), name, "Find All Memories"));
+		logRepository.save(new AppLogs(new Date(), name, "findAll", LogStatus.SUCCESS, null));
 		return repository.findAll();
 	}
 
 	@PostMapping("/create")
 	public Memory create(@Valid @RequestBody Memory memory) {
-		logRepository.save(new AppLogs(new Date(), name, "Create Memory"));
+		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS, memory.toString()));
 		return repository.save(memory);
 	}
 
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Memory> findById(@PathVariable(value = "id") long memoryId) {
 		if (repository.findById(memoryId).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
-			logRepository.save(new AppLogs(new Date(), name, "Find Memory By ID"));
+			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.SUCCESS, Long.toString(memoryId)));
 			return repository.findById(memoryId).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "Memory By ID is not Existing"));
+			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.FAILURE, Long.toString(memoryId)));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -58,13 +59,13 @@ public class MemoryController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long memoryId) {
 		if (repository.findById(memoryId).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
-			logRepository.save(new AppLogs(new Date(), name, "Successfully Deleted Memory"));
+			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.SUCCESS, Long.toString(memoryId)));
 			return repository.findById(memoryId).map(record -> {
 				repository.deleteById(memoryId);
 				return ResponseEntity.ok().build();
 			}).orElse(ResponseEntity.notFound().build());
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "Memory is not existing"));
+			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.FAILURE, Long.toString(memoryId)));
 			return ResponseEntity.notFound().build();
 		}
 
@@ -73,17 +74,18 @@ public class MemoryController {
 	@RequestMapping("/getUserMemories/{id}")
 	public Iterable<Memory> getUserMemories(@PathVariable long id) {
 		if (repository.getUserMemories(id) != null) {
-			logRepository.save(new AppLogs(new Date(), name, "Get User's Memories"));
+			logRepository.save(new AppLogs(new Date(), name, "getUserMemories", LogStatus.SUCCESS, Long.toString(id)));
 			return repository.getUserMemories(id);
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "User's Memories Are Not Found"));
+			logRepository.save(new AppLogs(new Date(), name, "getUserMemories", LogStatus.FAILURE, Long.toString(id)));
 			return repository.getUserMemories(id);
 		}
 	}
 
 	@RequestMapping("story/{story}/findMemoriesByYear/{year}")
 	public Iterable<Memory> findMemoriesByYear(@PathVariable long story, @PathVariable int year) {
-		logRepository.save(new AppLogs(new Date(), name, "findMemoriesByYear"));
+		logRepository.save(new AppLogs(new Date(), name, "findMemoriesByYear", LogStatus.SUCCESS,
+				"story id : " + Long.toString(story) + " year : " + Integer.toString(year)));
 
 		return repository.findMemoriesByYear(story, year);
 
@@ -91,14 +93,15 @@ public class MemoryController {
 
 	@RequestMapping("story/{story}/findMemoriesByTag/{tag}")
 	public Iterable<Memory> findMemoriesByTag(@PathVariable long story, @PathVariable String tag) {
-		logRepository.save(new AppLogs(new Date(), name, "findMemoriesByTag"));
+		logRepository.save(new AppLogs(new Date(), name, "findMemoriesByTag", LogStatus.FAILURE,
+				"story id : " + Long.toString(story) + " tag : " + tag));
 
 		return repository.findMemoriesByTag(story, tag);
 	}
 
 	@RequestMapping("/findMemoriesByKeyword/{description}")
 	public Iterable<Memory> findMemoriesByKeyword(String description) {
-		logRepository.save(new AppLogs(new Date(), name, "findMemoriesByKeyword"));
+		logRepository.save(new AppLogs(new Date(), name, "findMemoriesByKeyword", LogStatus.FAILURE, description));
 
 		return repository.findMemoriesByKeyword(description);
 
@@ -106,7 +109,7 @@ public class MemoryController {
 
 	@PutMapping(value = "/update/{id}")
 	public ResponseEntity<Memory> update(@PathVariable("id") long memory_id, @RequestBody Memory memory) {
-		logRepository.save(new AppLogs(new Date(), name, "update memories"));
+		logRepository.save(new AppLogs(new Date(), name, "update", LogStatus.FAILURE, memory.toString()));
 
 		return repository.findById(memory_id).map(record -> {
 			record.setDescription(memory.getDescription());
