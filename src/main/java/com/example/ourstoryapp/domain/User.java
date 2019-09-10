@@ -1,7 +1,7 @@
 package com.example.ourstoryapp.domain;
 
 import java.net.URI;
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,6 +65,8 @@ public class User {
 		this.first_name = first_name;
 		this.last_name = last_name;
 		this.password = password;
+		this.date_of_sign_up = new Date();
+		
 	}
 
 	public long getUser_id() {

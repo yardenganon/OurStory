@@ -49,10 +49,10 @@ public class Comment {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Comment(Memory memory, Date createDate, User users, String text) {
+	public Comment(Memory memory, User users, String text) {
 		super();
 		this.memory = memory;
-		this.createDate = createDate;
+		this.createDate = new Date();
 		this.users = users;
 		this.text = text;
 	}

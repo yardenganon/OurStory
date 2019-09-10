@@ -74,6 +74,7 @@ public class Memory {
 		this.tags = tags;
 		this.story = story;
 		this.description = description;
+		this.create_date = new Date();
 
 	}
 
