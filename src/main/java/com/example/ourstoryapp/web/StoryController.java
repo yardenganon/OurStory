@@ -150,4 +150,22 @@ public class StoryController {
 
 		return repository.findStoriesByDodYear(y);
 	}
+	
+	@RequestMapping("/findStoriesByDateOfBirth")
+	public Iterable<Story> findStoriesByDateOfBirth(@RequestParam("d") int d, @RequestParam("m") int m, @RequestParam("y") int y,
+			@RequestParam("name") String name_of_person) {
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDateOfBirth", LogStatus.SUCCESS.name(),
+				" day : " + d + " month : " + m + " year : " + y + " name : " + name_of_person));
+		return repository.findStoriesByDateOfBirth(d ,m , y, name_of_person);
+	}
+	
+	
+	@RequestMapping("/findStoriesByDateOfDeath")
+	public Iterable<Story> findStoriesByDateOfDeath(@RequestParam("d") int d, @RequestParam("m") int m, @RequestParam("y") int y,
+			@RequestParam("name") String name_of_person) {
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDateOfDeath", LogStatus.SUCCESS.name(),
+				" day : " + d + " month : " + m + " year : " + y + " name : " + name_of_person));
+		return repository.findStoriesByDateOfDeath(d ,m , y, name_of_person);
+	}
+	
 }
