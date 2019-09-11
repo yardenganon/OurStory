@@ -2,14 +2,15 @@ package com.example.ourstoryapp;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.ourstoryapp.da.CommentRepository;
 import com.example.ourstoryapp.da.LikesRepository;
@@ -18,8 +19,6 @@ import com.example.ourstoryapp.da.StoryRepository;
 import com.example.ourstoryapp.da.TagRepository;
 import com.example.ourstoryapp.da.UserRepository;
 import com.example.ourstoryapp.domain.Memory;
-import com.example.ourstoryapp.domain.Story;
-import com.example.ourstoryapp.domain.User;
 import com.example.ourstoryapp.web.MemoryController;
 
 @SpringBootApplication
@@ -88,11 +87,14 @@ public class OurstoryappApplication {
 			Memory memory = new Memory();
 			List<String> pictures = new ArrayList<>();
 			List<String> videos = new ArrayList<>();
-			pictures.add("www.google1.com");
-			pictures.add("www.google2.com");
-			videos.add("www.google1.com");
-			videos.add("www.google2.com");
-			memoryController.createMemory(memory, pictures, videos);
+			List<String> tags = new ArrayList<>();
+//			pictures.add("www.google1.com");
+//			pictures.add("www.google2.com");
+//			videos.add("www.google1.com");
+//			videos.add("www.google2.com");
+			tags.add("happy");
+			tags.add("fun");
+			memoryController.createMemory(memory, pictures, videos, tags);
 		};
 	}
 
