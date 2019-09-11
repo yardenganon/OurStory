@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.ourstoryapp.da.LogRepository;
 import com.example.ourstoryapp.da.MemTagRepository;
 import com.example.ourstoryapp.domain.AppLogs;
+import com.example.ourstoryapp.domain.LogStatus;
 import com.example.ourstoryapp.domain.Tag;
 
 @RestController
@@ -34,6 +35,7 @@ public class TagsInMemoryController {
 	// return all tags
 	@RequestMapping("/findAll")
 	public Iterable<Tag> getmemTags() {
+		logRepository.save(new AppLogs(new Date(), name, "findAll", LogStatus.SUCCESS.name(), null));
 		return mem_tags_repository.findAll();
 	}
 
@@ -41,11 +43,13 @@ public class TagsInMemoryController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> deletememtag(@PathVariable("id") String tag_name) {
 		if ((mem_tags_repository.findById(tag_name).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
+			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.SUCCESS.name(), tag_name));
 			return mem_tags_repository.findById(tag_name).map(record -> {
 				mem_tags_repository.deleteById(tag_name);
 				return ResponseEntity.ok().build();
 			}).orElse(ResponseEntity.notFound().build());
 		} else {
+			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.FAILURE.name(), tag_name));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -53,6 +57,7 @@ public class TagsInMemoryController {
 	// add tag
 	@PostMapping("/create")
 	public Tag Create(@Valid @RequestBody Tag tag) {
+		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), tag.toString()));
 		return mem_tags_repository.save(tag);
 	}
 
@@ -60,9 +65,11 @@ public class TagsInMemoryController {
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Tag> findbyid(@PathVariable(value = "id") String tag_name) {
 		if ((mem_tags_repository.findById(tag_name).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
+			logRepository.save(new AppLogs(new Date(), name, "findbyid", LogStatus.SUCCESS.name(), tag_name));
 			return mem_tags_repository.findById(tag_name).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		} else {
+			logRepository.save(new AppLogs(new Date(), name, "findbyid", LogStatus.FAILURE.name(), tag_name));
 			return ResponseEntity.notFound().build();
 		}
 	}

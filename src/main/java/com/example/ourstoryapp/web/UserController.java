@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.ourstoryapp.da.LogRepository;
 import com.example.ourstoryapp.da.UserRepository;
 import com.example.ourstoryapp.domain.AppLogs;
+import com.example.ourstoryapp.domain.LogStatus;
 import com.example.ourstoryapp.domain.User;
 import com.example.ourstoryapp.mail.MailClient;
 
@@ -43,6 +44,7 @@ public class UserController {
 	// get all users - sorted by ID (Read)
 	@GetMapping("/findAll")
 	public Iterable<User> getUser() {
+		logRepository.save(new AppLogs(new Date(), name, "findAll", LogStatus.SUCCESS.name(), null));
 		return repository.findAll();
 	}
 
@@ -50,9 +52,11 @@ public class UserController {
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<User> findById(@PathVariable(value = "id") long userId) {
 		if ((repository.findById(userId).map(record -> ResponseEntity.ok().body(record))).isPresent()) {
+			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.SUCCESS.name(), Long.toString(userId)));
 			return repository.findById(userId).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		} else {
+			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.FAILURE.name(), Long.toString(userId)));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -61,8 +65,10 @@ public class UserController {
 	@GetMapping("/findByEmail/{mail}")
 	public User findByEmail(@PathVariable(value = "mail") String mail) {
 		if ((repository.findByEmail(mail)) != null) {
+			logRepository.save(new AppLogs(new Date(), name, "findByEmail", LogStatus.SUCCESS.name(), mail));
 			return repository.findByEmail(mail);
 		} else {
+			logRepository.save(new AppLogs(new Date(), name, "findByEmail", LogStatus.FAILURE.name(), mail));
 			return null;
 		}
 	}
@@ -70,12 +76,14 @@ public class UserController {
 	// create new instance of User (Create)
 	@PostMapping("/create")
 	public User create(@Valid @RequestBody User user) {
+		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), user.toString()));
 		return repository.save(user);
 	}
 
 	@PutMapping(value = "/updatePassword")
 	public ResponseEntity<User> updatePassword(@PathVariable("id") long id) {
 		if(repository.findById(id).isPresent()) {
+			logRepository.save(new AppLogs(new Date(), name, "updatePassword", LogStatus.SUCCESS.name(), Long.toString(id)));
 			return repository.findById(id).map(record -> {
 				String password = new Random().ints(10, 33, 122).mapToObj(i -> String.valueOf((char) i))
 						.collect(Collectors.joining());
@@ -85,6 +93,7 @@ public class UserController {
 			}).orElse(ResponseEntity.notFound().build());
 		}
 		else {
+			logRepository.save(new AppLogs(new Date(), name, "updatePassword", LogStatus.FAILURE.name(), Long.toString(id)));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -93,11 +102,13 @@ public class UserController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long userId) {
 		if ((repository.findById(userId).map(record -> ResponseEntity.ok().body(record))).isPresent()) {
+			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.SUCCESS.name(), Long.toString(userId)));
 			repository.deleteById(userId);
 			return ResponseEntity.ok().build();
 		}
 
 		else {
+			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.FAILURE.name(), Long.toString(userId)));
 			return ResponseEntity.notFound().build();
 		}
 	}
