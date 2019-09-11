@@ -9,6 +9,6 @@ import com.example.ourstoryapp.domain.Picture;
 
 
 @RepositoryRestResource
-public interface PictureRepository extends JpaRepository <Picture,URI>{
+public interface PictureRepository extends JpaRepository <Picture,Long>{
 
 }

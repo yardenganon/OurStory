@@ -47,7 +47,7 @@ public class PictureController {
 	}
 
 	@GetMapping("/findById/{id}")
-	public ResponseEntity<Picture> findById(@PathVariable(value = "id") URI pictureId) {
+	public ResponseEntity<Picture> findById(@PathVariable(value = "id") Long pictureId) {
 		if (repository.findById(pictureId).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
 			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.SUCCESS.name(), pictureId.toString()));
 			return repository.findById(pictureId).map(record -> ResponseEntity.ok().body(record))
@@ -59,7 +59,7 @@ public class PictureController {
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id") URI pictureId) {
+	public ResponseEntity<?> delete(@PathVariable("id") Long pictureId) {
 		if (repository.findById(pictureId).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
 			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.SUCCESS.name(), pictureId.toString()));
 			return repository.findById(pictureId).map(record -> {
