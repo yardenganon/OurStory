@@ -43,7 +43,6 @@ public class UserController {
 	// get all users - sorted by ID (Read)
 	@GetMapping("/findAll")
 	public Iterable<User> getUser() {
-		logRepository.save(new AppLogs(new Date(), name, "Find All Users"));
 		return repository.findAll();
 	}
 
@@ -51,11 +50,9 @@ public class UserController {
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<User> findById(@PathVariable(value = "id") long userId) {
 		if ((repository.findById(userId).map(record -> ResponseEntity.ok().body(record))).isPresent()) {
-			logRepository.save(new AppLogs(new Date(), name,"Find User By ID"));
 			return repository.findById(userId).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		} else {
-			logRepository.save(new AppLogs(new Date(), name,"User By ID Is Not Found"));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -64,10 +61,8 @@ public class UserController {
 	@GetMapping("/findByEmail/{mail}")
 	public User findByEmail(@PathVariable(value = "mail") String mail) {
 		if ((repository.findByEmail(mail)) != null) {
-			logRepository.save(new AppLogs(new Date(), name,"Find By Email"));
 			return repository.findByEmail(mail);
 		} else {
-			logRepository.save(new AppLogs(new Date(), name,"Find By Email is not found"));
 			return null;
 		}
 	}
@@ -75,7 +70,6 @@ public class UserController {
 	// create new instance of User (Create)
 	@PostMapping("/create")
 	public User create(@Valid @RequestBody User user) {
-		logRepository.save(new AppLogs(new Date(), name,"Cretae User"));
 		return repository.save(user);
 	}
 
@@ -87,12 +81,10 @@ public class UserController {
 						.collect(Collectors.joining());
 				record.setPassword(password);
 				User updated = repository.save(record);
-				logRepository.save(new AppLogs(new Date(), name, "Password Has Been Changed"));
 				return ResponseEntity.ok().body(updated);
 			}).orElse(ResponseEntity.notFound().build());
 		}
 		else {
-			logRepository.save(new AppLogs(new Date(), name,"Your User Is Not Found"));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -102,12 +94,10 @@ public class UserController {
 	public ResponseEntity<?> delete(@PathVariable("id") long userId) {
 		if ((repository.findById(userId).map(record -> ResponseEntity.ok().body(record))).isPresent()) {
 			repository.deleteById(userId);
-			logRepository.save(new AppLogs(new Date(), name,"Successfully deleted User"));
 			return ResponseEntity.ok().build();
 		}
 
 		else {
-			logRepository.save(new AppLogs(new Date(), name,"User is not existing"));
 			return ResponseEntity.notFound().build();
 		}
 	}
