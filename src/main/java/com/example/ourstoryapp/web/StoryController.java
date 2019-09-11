@@ -38,14 +38,14 @@ public class StoryController {
 	// get all stories - sorted by ID (Read)
 	@GetMapping("/findAll")
 	public Iterable<Story> getStories() {
-		logRepository.save(new AppLogs(new Date(), name, "Find All Stories", LogStatus.SUCCESS, null));
+		logRepository.save(new AppLogs(new Date(), name, "Find All Stories", LogStatus.SUCCESS.name(), null));
 		return repository.findAll();
 	}
 
 	// create new instance of Story (Create)
 	@PostMapping("/create")
 	public Story create(@Valid @RequestBody Story story) {
-		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS, story.toString()));
+		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), story.toString()));
 		return repository.save(story);
 	}
 
@@ -53,11 +53,11 @@ public class StoryController {
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Story> findById(@PathVariable(value = "id") long storyId) {
 		if ((repository.findById(storyId).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
-			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.SUCCESS, Long.toString(storyId)));
+			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.SUCCESS.name(), Long.toString(storyId)));
 			return repository.findById(storyId).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.FAILURE, Long.toString(storyId)));
+			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.FAILURE.name(), Long.toString(storyId)));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -66,13 +66,13 @@ public class StoryController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long storyId) {
 		if ((repository.findById(storyId).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
-			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.SUCCESS, Long.toString(storyId)));
+			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.SUCCESS.name(), Long.toString(storyId)));
 			return repository.findById(storyId).map(record -> {
 				repository.deleteById(storyId);
 				return ResponseEntity.ok().build();
 			}).orElse(ResponseEntity.notFound().build());
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.FAILURE, Long.toString(storyId)));
+			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.FAILURE.name(), Long.toString(storyId)));
 			return ResponseEntity.notFound().build();
 		}
 
@@ -81,7 +81,7 @@ public class StoryController {
 	// update story by id using new values (Update)
 	@PutMapping(value = "/update/{id}")
 	public ResponseEntity<Story> update(@PathVariable("id") long storyId, @RequestBody Story story) {
-		logRepository.save(new AppLogs(new Date(), name, "update", LogStatus.SUCCESS,
+		logRepository.save(new AppLogs(new Date(), name, "update", LogStatus.SUCCESS.name(),
 				"storyId : " + Long.toString(storyId) + "story : " + storyId));
 		return repository.findById(storyId).map(record -> {
 			record.setDate_of_birth(story.getDate_of_birth());
@@ -97,7 +97,7 @@ public class StoryController {
 
 	@RequestMapping("/findStoriesByKeyword")
 	public Iterable<Story> findStoriesByKeyword(@RequestParam("name") String name_of_person) {
-		logRepository.save(new AppLogs(new Date(), name, "findStoriesByKeyword", LogStatus.SUCCESS, name_of_person));
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByKeyword", LogStatus.SUCCESS.name(), name_of_person));
 
 		return repository.findStoriesByKeyword(name_of_person);
 	}
@@ -106,7 +106,7 @@ public class StoryController {
 	@RequestMapping("/findStoriesByDobFull")
 	public Iterable<Story> findStoriesByDobFull(@RequestParam("d") int d, @RequestParam("m") int m,
 			@RequestParam("y") int y) {
-		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDobFull", LogStatus.SUCCESS,
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDobFull", LogStatus.SUCCESS.name(),
 				"day : " + d + " month : " + m + " year : " + y));
 
 		return repository.findStoriesByDobFull(d, m, y);
@@ -114,7 +114,7 @@ public class StoryController {
 
 	@RequestMapping("/findStoriesByDobYearMonth")
 	public Iterable<Story> findStoriesByDobYearMonth(@RequestParam("m") int m, @RequestParam("y") int y) {
-		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDobYearMonth", LogStatus.SUCCESS,
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDobYearMonth", LogStatus.SUCCESS.name(),
 				" month : " + m + " year : " + y));
 
 		return repository.findStoriesByDobYearMonth(m, y);
@@ -122,7 +122,7 @@ public class StoryController {
 
 	@RequestMapping("/findStoriesByDobYear")
 	public Iterable<Story> findStoriesByDobYear(@RequestParam("y") int y) {
-		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDobYear", LogStatus.SUCCESS, " year : " + y));
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDobYear", LogStatus.SUCCESS.name(), " year : " + y));
 
 		return repository.findStoriesByDobYear(y);
 	}
@@ -130,7 +130,7 @@ public class StoryController {
 	@RequestMapping("/findStoriesByDodFull")
 	public Iterable<Story> findStoriesByDodFull(@RequestParam("d") int d, @RequestParam("m") int m,
 			@RequestParam("y") int y) {
-		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDodFull", LogStatus.SUCCESS,
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDodFull", LogStatus.SUCCESS.name(),
 				"day : " + d + " month : " + m + " year : " + y));
 
 		return repository.findStoriesByDodFull(d, m, y);
@@ -138,7 +138,7 @@ public class StoryController {
 
 	@RequestMapping("/findStoriesByDodYearMonth")
 	public Iterable<Story> findStoriesByDodYearMonth(@RequestParam("m") int m, @RequestParam("y") int y) {
-		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDodYearMonth", LogStatus.SUCCESS,
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDodYearMonth", LogStatus.SUCCESS.name(),
 				" month : " + m + " year : " + y));
 
 		return repository.findStoriesByDodYearMonth(m, y);
@@ -146,7 +146,7 @@ public class StoryController {
 
 	@RequestMapping("/findStoriesByDodYear")
 	public Iterable<Story> findStoriesByDodYear(@RequestParam("y") int y) {
-		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDodYear", LogStatus.SUCCESS, " year : " + y));
+		logRepository.save(new AppLogs(new Date(), name, "findStoriesByDodYear", LogStatus.SUCCESS.name(), " year : " + y));
 
 		return repository.findStoriesByDodYear(y);
 	}

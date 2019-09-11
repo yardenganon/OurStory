@@ -36,24 +36,24 @@ public class PictureController {
 
 	@GetMapping("/findAll")
 	public Iterable<Picture> findAll() {
-		logRepository.save(new AppLogs(new Date(), name, "findAll", LogStatus.SUCCESS, null));
+		logRepository.save(new AppLogs(new Date(), name, "findAll", LogStatus.SUCCESS.name(), null));
 		return repository.findAll();
 	}
 
 	@PostMapping("/create")
 	public Picture create(@Valid @RequestBody Picture picture) {
-		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS, picture.toString()));
+		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), picture.toString()));
 		return repository.save(picture);
 	}
 
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Picture> findById(@PathVariable(value = "id") URI pictureId) {
 		if (repository.findById(pictureId).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
-			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.SUCCESS, pictureId.toString()));
+			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.SUCCESS.name(), pictureId.toString()));
 			return repository.findById(pictureId).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.FAILURE, pictureId.toString()));
+			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.FAILURE.name(), pictureId.toString()));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -61,13 +61,13 @@ public class PictureController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") URI pictureId) {
 		if (repository.findById(pictureId).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
-			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.SUCCESS, pictureId.toString()));
+			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.SUCCESS.name(), pictureId.toString()));
 			return repository.findById(pictureId).map(record -> {
 				repository.deleteById(pictureId);
 				return ResponseEntity.ok().build();
 			}).orElse(ResponseEntity.notFound().build());
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.FAILURE, pictureId.toString()));
+			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.FAILURE.name(), pictureId.toString()));
 			return ResponseEntity.notFound().build();
 		}
 	}

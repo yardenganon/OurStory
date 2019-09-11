@@ -11,7 +11,7 @@ public class AppLogs {
 	private Date time;
 	private String sourceClass;
 	private String description;
-	private LogStatus status;
+	private String status;
 	private String variables;
 
 	public AppLogs() {
@@ -19,7 +19,7 @@ public class AppLogs {
 		// TODO Auto-generated constructor stub
 	}
 
-	public AppLogs(Date time, String sourceClass, String description, LogStatus status, String variables) {
+	public AppLogs(Date time, String sourceClass, String description, String status, String variables) {
 		super();
 		this.time = time;
 		this.sourceClass = sourceClass;
@@ -52,11 +52,11 @@ public class AppLogs {
 		this.description = description;
 	}
 
-	public LogStatus getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(LogStatus status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
