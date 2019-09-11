@@ -1,6 +1,8 @@
 package com.example.ourstoryapp.web;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -17,9 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ourstoryapp.da.LogRepository;
 import com.example.ourstoryapp.da.MemoryRepository;
+import com.example.ourstoryapp.da.PictureRepository;
+import com.example.ourstoryapp.da.VideoRepository;
 import com.example.ourstoryapp.domain.AppLogs;
 import com.example.ourstoryapp.domain.LogStatus;
 import com.example.ourstoryapp.domain.Memory;
+import com.example.ourstoryapp.domain.Picture;
+import com.example.ourstoryapp.domain.Video;
 
 @RestController
 @RequestMapping("/memories")
@@ -27,6 +33,10 @@ public class MemoryController {
 
 	@Autowired
 	MemoryRepository repository;
+	@Autowired
+	PictureRepository picture_repository;
+	@Autowired
+	VideoRepository video_repository;
 	@Autowired
 	private LogRepository logRepository;
 
@@ -47,11 +57,13 @@ public class MemoryController {
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Memory> findById(@PathVariable(value = "id") long memoryId) {
 		if (repository.findById(memoryId).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
-			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.SUCCESS.name(), Long.toString(memoryId)));
+			logRepository
+					.save(new AppLogs(new Date(), name, "findById", LogStatus.SUCCESS.name(), Long.toString(memoryId)));
 			return repository.findById(memoryId).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.FAILURE.name(), Long.toString(memoryId)));
+			logRepository
+					.save(new AppLogs(new Date(), name, "findById", LogStatus.FAILURE.name(), Long.toString(memoryId)));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -59,13 +71,15 @@ public class MemoryController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long memoryId) {
 		if (repository.findById(memoryId).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
-			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.SUCCESS.name(), Long.toString(memoryId)));
+			logRepository
+					.save(new AppLogs(new Date(), name, "delete", LogStatus.SUCCESS.name(), Long.toString(memoryId)));
 			return repository.findById(memoryId).map(record -> {
 				repository.deleteById(memoryId);
 				return ResponseEntity.ok().build();
 			}).orElse(ResponseEntity.notFound().build());
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.FAILURE.name(), Long.toString(memoryId)));
+			logRepository
+					.save(new AppLogs(new Date(), name, "delete", LogStatus.FAILURE.name(), Long.toString(memoryId)));
 			return ResponseEntity.notFound().build();
 		}
 
@@ -74,20 +88,25 @@ public class MemoryController {
 	@RequestMapping("/getUserMemories/{id}")
 	public Iterable<Memory> getUserMemories(@PathVariable long id) {
 		if (repository.getUserMemories(id) != null) {
-			logRepository.save(new AppLogs(new Date(), name, "getUserMemories", LogStatus.SUCCESS.name(), Long.toString(id)));
+			logRepository.save(
+					new AppLogs(new Date(), name, "getUserMemories", LogStatus.SUCCESS.name(), Long.toString(id)));
 			return repository.getUserMemories(id);
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "getUserMemories", LogStatus.FAILURE.name(), Long.toString(id)));
+			logRepository.save(
+					new AppLogs(new Date(), name, "getUserMemories", LogStatus.FAILURE.name(), Long.toString(id)));
 			return repository.getUserMemories(id);
 		}
 	}
+
 	@RequestMapping("/getStoryMemoriesSortedByYear/{id}")
 	public Iterable<Memory> getStoryMemoriesSortedByYear(@PathVariable long id) {
 		if (repository.getStoryMemoriesSortedByYear(id) != null) {
-			logRepository.save(new AppLogs(new Date(), name, "getStoryMemoriesSortedByYear", LogStatus.SUCCESS.name(), Long.toString(id)));
+			logRepository.save(new AppLogs(new Date(), name, "getStoryMemoriesSortedByYear", LogStatus.SUCCESS.name(),
+					Long.toString(id)));
 			return repository.getStoryMemoriesSortedByYear(id);
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "getStoryMemoriesSortedByYear", LogStatus.FAILURE.name(), Long.toString(id)));
+			logRepository.save(new AppLogs(new Date(), name, "getStoryMemoriesSortedByYear", LogStatus.FAILURE.name(),
+					Long.toString(id)));
 			return repository.getStoryMemoriesSortedByYear(id);
 		}
 	}
@@ -111,7 +130,8 @@ public class MemoryController {
 
 	@RequestMapping("/findMemoriesByKeyword/{description}")
 	public Iterable<Memory> findMemoriesByKeyword(String description) {
-		logRepository.save(new AppLogs(new Date(), name, "findMemoriesByKeyword", LogStatus.FAILURE.name(), description));
+		logRepository
+				.save(new AppLogs(new Date(), name, "findMemoriesByKeyword", LogStatus.FAILURE.name(), description));
 
 		return repository.findMemoriesByKeyword(description);
 
@@ -133,4 +153,31 @@ public class MemoryController {
 			return ResponseEntity.ok().body(updated);
 		}).orElse(ResponseEntity.notFound().build());
 	}
+
+	@PutMapping(value = "/createMemory")
+	public ResponseEntity<Memory> createMemory(@RequestBody Memory memory, @RequestBody List<String> pictures,
+			@RequestBody List<String> videos) {
+		logRepository.save(new AppLogs(new Date(), name, "createMemory", LogStatus.SUCCESS.name(), memory.toString()));
+		Memory m = repository.save(memory);
+		List<Picture> p = new ArrayList<Picture>();
+		List<Video> v = new ArrayList<Video>();
+		for (String s : pictures) {
+			Picture picture = new Picture(s, m);
+			picture_repository.save(picture);
+			p.add(picture);
+		}
+		for (String s : videos) {
+			Video video = new Video(s, m);
+			video_repository.save(video);
+			v.add(video);
+		}
+
+		return repository.findById(m.getMemory_id()).map(record -> {
+			record.setPictures(p);
+			record.setVideos(v);
+			Memory updated = repository.save(record);
+			return ResponseEntity.ok().body(updated);
+		}).orElse(ResponseEntity.notFound().build());
+	}
+
 }
