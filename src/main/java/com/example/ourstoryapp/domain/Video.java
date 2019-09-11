@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Video {
 	
@@ -22,6 +24,7 @@ public class Video {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "memory")
+	@JsonIgnore
 	private Memory memory;
 	
 	private String link;
