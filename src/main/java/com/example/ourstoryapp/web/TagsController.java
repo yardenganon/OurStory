@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.ourstoryapp.da.LogRepository;
 import com.example.ourstoryapp.da.TagRepository;
 import com.example.ourstoryapp.domain.AppLogs;
+import com.example.ourstoryapp.domain.LogStatus;
 import com.example.ourstoryapp.domain.Tag;
 
 @RestController 
@@ -36,6 +37,7 @@ public class TagsController {
 	//return all tags	
 	@RequestMapping("/findAll")
 	public Iterable<Tag> getTags() {
+		logRepository.save(new AppLogs(new Date(), name, "findAll", LogStatus.SUCCESS.name(), null));
 		return repository.findAll();
     } 
 	
@@ -43,12 +45,14 @@ public class TagsController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") String tag_name) {
 		if((repository.findById(tag_name)).isPresent()) {
+			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.SUCCESS.name(), tag_name));
 			return repository.findById(tag_name).map(record -> {
 			repository.deleteById(tag_name);
 			return ResponseEntity.ok().build();
 		}).orElse(ResponseEntity.notFound().build());
 		}
 		else {
+			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.FAILURE.name(), tag_name));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -56,6 +60,7 @@ public class TagsController {
 	//add tag
 	@PostMapping("/create")
 	public Tag create(@Valid @RequestBody Tag tag) {
+		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), tag.toString()));
 		return repository.save(tag);	
 	}
 	
@@ -63,27 +68,32 @@ public class TagsController {
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Tag> findByid( @PathVariable(value = "id") String tag_name) {
 		if((repository.findById(tag_name)).isPresent()) {
+			logRepository.save(new AppLogs(new Date(), name, "findByid", LogStatus.SUCCESS.name(), tag_name));
 			return repository.findById(tag_name).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		}
 		else {
+			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.FAILURE.name(), tag_name));
 			return ResponseEntity.notFound().build();
 		}
 	}
 	
 	@RequestMapping("/findTop3TagsByStoryId")
 	public Iterable<String> findTop3TagsByStoryId(@RequestParam("storyId") long storyId) {
+		logRepository.save(new AppLogs(new Date(), name, "findTop3TagsByStoryId", LogStatus.SUCCESS.name(), Long.toString(storyId)));
 		return repository.findTop3TagsByStoryId(storyId);
 	}
 	
 	
 	@RequestMapping("/findTop5TagsByStoryId")
 	public Iterable<String> findTop5TagsByStoryId(@RequestParam("storyId") long storyId) {
+		logRepository.save(new AppLogs(new Date(), name, "findTop5TagsByStoryId", LogStatus.SUCCESS.name(), Long.toString(storyId)));
 		return repository.findTop5TagsByStoryId(storyId);
 	}
 	
 	@RequestMapping("/findTop10TagsByStoryId")
 	public Iterable<String> findTop10TagsByStoryId(@RequestParam("storyId") long storyId) {
+		logRepository.save(new AppLogs(new Date(), name, "findTop10TagsByStoryId", LogStatus.SUCCESS.name(), Long.toString(storyId)));
 		return repository.findTop10TagsByStoryId(storyId);
 	}
 }
