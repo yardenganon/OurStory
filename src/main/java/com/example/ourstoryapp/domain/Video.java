@@ -24,7 +24,7 @@ public class Video {
 	@JoinColumn(name = "memory")
 	private Memory memory;
 	
-	private URI link;
+	private String link;
 	
 	
 	public Video() {

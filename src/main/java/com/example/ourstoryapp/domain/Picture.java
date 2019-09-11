@@ -23,7 +23,7 @@ public class Picture {
 	@JoinColumn(name = "memory")
 	private Memory memory;
 	
-	private URI link;
+	private String link;
 	
 	
 	
