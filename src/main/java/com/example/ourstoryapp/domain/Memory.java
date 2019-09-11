@@ -56,13 +56,12 @@ public class Memory {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
 	@JsonIgnore
 	private List<Likes> likes;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
 
 	private List<Picture> pictures;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
-	@JsonIgnore
 	private List<Video> videos;
 
 	public Memory() {
@@ -70,7 +69,7 @@ public class Memory {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Memory(User contributer, Date memory_date, Set<Tag> tags, Story story,String description) {
+	public Memory(User contributer, Date memory_date, Set<Tag> tags, Story story, String description) {
 		super();
 		this.contributer = contributer;
 		this.memory_date = memory_date;
@@ -80,7 +79,6 @@ public class Memory {
 		this.create_date = new Date();
 
 	}
-
 
 	public Memory(Story story, User contributer, String description, Date memory_date, Date create_date, String feeling,
 			String location, List<Picture> pictures) {
