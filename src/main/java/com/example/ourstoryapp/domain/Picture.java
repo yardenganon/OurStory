@@ -24,7 +24,6 @@ public class Picture {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "memory")
-
 	private Memory memory;
 	
 	private String link;

@@ -58,7 +58,7 @@ public class Memory {
 	private List<Likes> likes;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
-	@JsonIgnore
+	
 	private List<Picture> pictures;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")

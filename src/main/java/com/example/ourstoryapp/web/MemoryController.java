@@ -81,6 +81,16 @@ public class MemoryController {
 			return repository.getUserMemories(id);
 		}
 	}
+	@RequestMapping("/getStoryMemoriesSortedByYear/{id}")
+	public Iterable<Memory> getStoryMemoriesSortedByYear(@PathVariable long id) {
+		if (repository.getStoryMemoriesSortedByYear(id) != null) {
+			logRepository.save(new AppLogs(new Date(), name, "getStoryMemoriesSortedByYear", LogStatus.SUCCESS.name(), Long.toString(id)));
+			return repository.getStoryMemoriesSortedByYear(id);
+		} else {
+			logRepository.save(new AppLogs(new Date(), name, "getStoryMemoriesSortedByYear", LogStatus.FAILURE.name(), Long.toString(id)));
+			return repository.getStoryMemoriesSortedByYear(id);
+		}
+	}
 
 	@RequestMapping("story/{story}/findMemoriesByYear/{year}")
 	public Iterable<Memory> findMemoriesByYear(@PathVariable long story, @PathVariable int year) {
