@@ -31,17 +31,17 @@ public class Picture {
 
 	}
 
-	public Picture(URI link, Memory memory) {
+	public Picture(String link, Memory memory) {
 		super();
 		this.link = link;
 		this.memory = memory;
 	}
 
-	public URI getLink() {
+	public String getLink() {
 		return link;
 	}
 
-	public void setLink(URI link) {
+	public void setLink(String link) {
 		this.link = link;
 	}
 
