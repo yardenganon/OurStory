@@ -37,5 +37,12 @@ public interface StoryRepository extends JpaRepository <Story ,Long> {
 	@Query(value = "SELECT Story.* FROM Story WHERE EXTRACT (year FROM Story.date_of_death) = ?1", nativeQuery = true)
 	List<Story> findStoriesByDodYear(int y);
 	
-	
+	// find story by date of birth and by name of the story
+	@Query(value = "SELECT Story.* FROM Story WHERE EXTRACT  (day FROM Story.date_of_birth) = ?1 AND EXTRACT (month FROM Story.date_of_birth) = ?2 AND EXTRACT (year FROM Story.date_of_birth) = ?3 AND Story.name_of_person LIKE CONCAT('%',?4,'%')", nativeQuery = true)
+	List<Story> findStoriesByDateOfBirth(int d ,int m ,int y,String name_of_person);
+		
+	// find story by date of death and by name of the story
+	@Query(value = "SELECT Story.* FROM Story WHERE EXTRACT  (day FROM Story.date_of_death) = ?1 AND EXTRACT (month FROM Story.date_of_death) = ?2 AND EXTRACT (year FROM Story.date_of_death) = ?3 AND Story.name_of_person LIKE CONCAT('%',?4,'%')", nativeQuery = true)
+	List<Story> findStoriesByDateOfDeath(int d ,int m ,int y,String name_of_person);
+		
 }
