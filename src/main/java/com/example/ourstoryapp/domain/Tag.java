@@ -16,6 +16,9 @@ public class Tag {
 	@Id
 //	@GeneratedValue(strategy = GenerationType.AUTO)
 	String tag_name;
+	
+	
+	String image;
 
 	@Column(name ="tag_name",nullable=false)
 
