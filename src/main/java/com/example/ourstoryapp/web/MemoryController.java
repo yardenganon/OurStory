@@ -2,7 +2,9 @@ package com.example.ourstoryapp.web;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -20,11 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.ourstoryapp.da.LogRepository;
 import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.da.PictureRepository;
+import com.example.ourstoryapp.da.TagRepository;
 import com.example.ourstoryapp.da.VideoRepository;
 import com.example.ourstoryapp.domain.AppLogs;
 import com.example.ourstoryapp.domain.LogStatus;
 import com.example.ourstoryapp.domain.Memory;
 import com.example.ourstoryapp.domain.Picture;
+import com.example.ourstoryapp.domain.Tag;
 import com.example.ourstoryapp.domain.Video;
 
 @RestController
@@ -37,6 +41,8 @@ public class MemoryController {
 	PictureRepository picture_repository;
 	@Autowired
 	VideoRepository video_repository;
+	@Autowired
+	TagRepository tag_repository;
 	@Autowired
 	private LogRepository logRepository;
 
@@ -156,11 +162,12 @@ public class MemoryController {
 
 	@PutMapping(value = "/createMemory")
 	public ResponseEntity<Memory> createMemory(@RequestBody Memory memory, @RequestBody List<String> pictures,
-			@RequestBody List<String> videos) {
+			@RequestBody List<String> videos, @RequestBody List<String> tags) {
 		logRepository.save(new AppLogs(new Date(), name, "createMemory", LogStatus.SUCCESS.name(), memory.toString()));
 		Memory m = repository.save(memory);
 		List<Picture> p = new ArrayList<Picture>();
 		List<Video> v = new ArrayList<Video>();
+		Set<Tag> t = new HashSet<Tag>();
 		for (String s : pictures) {
 			Picture picture = new Picture(s, m);
 			picture_repository.save(picture);
@@ -171,10 +178,17 @@ public class MemoryController {
 			video_repository.save(video);
 			v.add(video);
 		}
-
+		for (String s : tags) {
+			Tag tag = new Tag(s);
+			if (!tag_repository.findById(s).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
+				tag_repository.save(tag);
+			}
+			t.add(tag);
+		}
 		return repository.findById(m.getMemory_id()).map(record -> {
 			record.setPictures(p);
 			record.setVideos(v);
+			record.setTags(t);
 			Memory updated = repository.save(record);
 			return ResponseEntity.ok().body(updated);
 		}).orElse(ResponseEntity.notFound().build());

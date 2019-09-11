@@ -22,16 +22,19 @@ public class Tag {
 
 	@Column(name ="tag_name",nullable=false)
 
+	//@JsonManagedReference
 	@ManyToMany(mappedBy = "tags")
-	@JsonManagedReference
 	@JsonIgnore
 	private Set<Memory> memories;
 	
+	//@JsonManagedReference
 	@ManyToMany(mappedBy = "tags")
-	@JsonManagedReference
 	@JsonIgnore
 	private Set<Comment> comments;
-
+	
+	
+	
+	
 	public Set<Memory> getMemories() {
 		return memories;
 	}
