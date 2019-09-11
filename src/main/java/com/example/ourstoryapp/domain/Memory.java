@@ -78,12 +78,6 @@ public class Memory {
 
 	}
 
-	public Memory(Story storyid, String dec, Date datecreated) {
-		this.story = storyid;
-		this.description = dec;
-		this.create_date = datecreated;
-
-	}
 
 	public Memory(Story story, User contributer, String description, Date memory_date, Date create_date, String feeling,
 			String location, List<Picture> pictures) {
@@ -92,7 +86,7 @@ public class Memory {
 		this.contributer = contributer;
 		this.description = description;
 		this.memory_date = memory_date;
-		this.create_date = create_date;
+		this.create_date = new Date();
 		this.feeling = feeling;
 		this.location = location;
 		if (pictures != null)
