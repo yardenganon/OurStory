@@ -18,6 +18,9 @@ public interface MemoryRepository extends JpaRepository<Memory, Long> {
 
 	@Query(value = "SELECT * FROM MEMORY WHERE (Memory.story=?1 AND EXTRACT (year FROM Memory.memory_date) = ?2 ) ORDER BY Memory.memory_date DESC", nativeQuery = true)
 	List<Memory> findMemoriesByYear(long story, int year);
+	
+	@Query(value = "SELECT * FROM MEMORY WHERE (Memory.story=?1) ORDER BY Memory.memory_date DESC", nativeQuery = true)
+	List<Memory> getStoryMemoriesSortedByYear(long story);
 
 	@Query(value = "SELECT MEMORY.* FROM TAG_IN_MEMORY INNER JOIN MEMORY on (MEMORY.memory_id=TAG_IN_MEMORY.memory_id) WHERE (Memory.story=?1 AND TAG_IN_MEMORY.tag_name=?2) ORDER BY Memory.memory_date DESC", nativeQuery = true)
 	List<Memory> findMemoriesByTag(long story, String t);

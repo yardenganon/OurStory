@@ -19,11 +19,11 @@ import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SqlResultSetMapping;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-
 public class Memory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,15 +54,15 @@ public class Memory {
 	private Set<Tag> tags;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
-	
+	@JsonIgnore
 	private List<Likes> likes;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
-	
+
 	private List<Picture> pictures;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
-
+	@JsonIgnore
 	private List<Video> videos;
 
 	public Memory() {
