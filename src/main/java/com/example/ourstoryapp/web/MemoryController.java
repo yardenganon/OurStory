@@ -162,7 +162,7 @@ public class MemoryController {
 		}).orElse(ResponseEntity.notFound().build());
 	}
 
-	@PutMapping(value = "/createMemory")
+	@PostMapping(value = "/createMemory")
 	public ResponseEntity<Memory> createMemory(@RequestBody Memory memory, @RequestBody List<String> pictures,
 			@RequestBody List<String> videos, @RequestBody List<String> tags) {
 		logRepository.save(new AppLogs(new Date(), name, "createMemory", LogStatus.SUCCESS.name(), memory.toString()));
@@ -196,7 +196,7 @@ public class MemoryController {
 		}).orElse(ResponseEntity.notFound().build());
 	}
 
-	@PutMapping(value = "/addMediaToMemory")
+	@PostMapping(value = "/addMediaToMemory")
 	public ResponseEntity<Memory> addMediaToMemory(@PathVariable long memory, @RequestBody List<String> pictures,
 			@RequestBody List<String> videos, @RequestBody List<String> tags) {
 		logRepository.save(
