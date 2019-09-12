@@ -29,7 +29,7 @@ public class TagsInMemoryController {
 	private MemTagRepository mem_tags_repository;
 	@Autowired
 	private LogRepository logRepository;
-	Logger logger = LogManager.getLogger(TagsInMemoryController.class);
+
 	final String name = TagsInMemoryController.class.getName();
 
 	// return all tags

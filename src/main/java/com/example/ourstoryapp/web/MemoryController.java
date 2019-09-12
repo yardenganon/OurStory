@@ -131,9 +131,6 @@ public class MemoryController {
 
 	@RequestMapping("story/{story}/findMemoriesByTag/{tag}")
 	public Iterable<Memory> findMemoriesByTag(@PathVariable long story, @PathVariable String tag) {
-		// logRepository.save(new AppLogs(new Date(), name, "findMemoriesByTag",
-		// LogStatus.FAILURE.name(),"story id : " + Long.toString(story) + " tag : " +
-		// tag));
 		logRepository.save(new AppLogs(new Date(), name, "findMemoriesByTag", LogStatus.SUCCESS.name(),
 				"story id : " + Long.toString(story) + " tag : " + tag));
 		return repository.findMemoriesByTag(story, tag);
@@ -141,8 +138,6 @@ public class MemoryController {
 
 	@RequestMapping("/findMemoriesByKeyword/{description}")
 	public Iterable<Memory> findMemoriesByKeyword(String description) {
-		// logRepository.save(new AppLogs(new Date(), name, "findMemoriesByKeyword",
-		// LogStatus.FAILURE.name(), description));
 		logRepository
 				.save(new AppLogs(new Date(), name, "findMemoriesByKeyword", LogStatus.SUCCESS.name(), description));
 
@@ -152,8 +147,6 @@ public class MemoryController {
 
 	@PutMapping(value = "/update/{id}")
 	public ResponseEntity<Memory> update(@PathVariable("id") long memory_id, @RequestBody Memory memory) {
-		// logRepository.save(new AppLogs(new Date(), name, "update",
-		// LogStatus.FAILURE.name(), memory.toString()));
 		logRepository.save(new AppLogs(new Date(), name, "update", LogStatus.SUCCESS.name(), memory.toString()));
 
 		return repository.findById(memory_id).map(record -> {
@@ -239,7 +232,7 @@ public class MemoryController {
 	}
 
 	@RequestMapping("ViewStory/{story}")
-	public HashMap<Integer, List<String[]>> ViewStory2(@PathVariable("story") long story) {
+	public HashMap<Integer, List<String[]>> ViewStory(@PathVariable("story") long story) {
 		logRepository.save(new AppLogs(new Date(), name, "ViewStory", LogStatus.SUCCESS.name(),
 				"story id : " + Long.toString(story)));
 		List<Integer> relevantYears = ViewStoryHelperMethod(story);
