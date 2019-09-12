@@ -1,8 +1,11 @@
 package com.example.ourstoryapp.web;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -128,16 +131,20 @@ public class MemoryController {
 
 	@RequestMapping("story/{story}/findMemoriesByTag/{tag}")
 	public Iterable<Memory> findMemoriesByTag(@PathVariable long story, @PathVariable String tag) {
-		logRepository.save(new AppLogs(new Date(), name, "findMemoriesByTag", LogStatus.FAILURE.name(),
+		// logRepository.save(new AppLogs(new Date(), name, "findMemoriesByTag",
+		// LogStatus.FAILURE.name(),"story id : " + Long.toString(story) + " tag : " +
+		// tag));
+		logRepository.save(new AppLogs(new Date(), name, "findMemoriesByTag", LogStatus.SUCCESS.name(),
 				"story id : " + Long.toString(story) + " tag : " + tag));
-
 		return repository.findMemoriesByTag(story, tag);
 	}
 
 	@RequestMapping("/findMemoriesByKeyword/{description}")
 	public Iterable<Memory> findMemoriesByKeyword(String description) {
+		// logRepository.save(new AppLogs(new Date(), name, "findMemoriesByKeyword",
+		// LogStatus.FAILURE.name(), description));
 		logRepository
-				.save(new AppLogs(new Date(), name, "findMemoriesByKeyword", LogStatus.FAILURE.name(), description));
+				.save(new AppLogs(new Date(), name, "findMemoriesByKeyword", LogStatus.SUCCESS.name(), description));
 
 		return repository.findMemoriesByKeyword(description);
 
@@ -145,7 +152,9 @@ public class MemoryController {
 
 	@PutMapping(value = "/update/{id}")
 	public ResponseEntity<Memory> update(@PathVariable("id") long memory_id, @RequestBody Memory memory) {
-		logRepository.save(new AppLogs(new Date(), name, "update", LogStatus.FAILURE.name(), memory.toString()));
+		// logRepository.save(new AppLogs(new Date(), name, "update",
+		// LogStatus.FAILURE.name(), memory.toString()));
+		logRepository.save(new AppLogs(new Date(), name, "update", LogStatus.SUCCESS.name(), memory.toString()));
 
 		return repository.findById(memory_id).map(record -> {
 			record.setDescription(memory.getDescription());
@@ -192,6 +201,60 @@ public class MemoryController {
 			Memory updated = repository.save(record);
 			return ResponseEntity.ok().body(updated);
 		}).orElse(ResponseEntity.notFound().build());
+	}
+
+	@PutMapping(value = "/addMediaToMemory")
+	public ResponseEntity<Memory> addMediaToMemory(@PathVariable long memory, @RequestBody List<String> pictures,
+			@RequestBody List<String> videos, @RequestBody List<String> tags) {
+		logRepository.save(
+				new AppLogs(new Date(), name, "addMediaToMemory", LogStatus.SUCCESS.name(), Long.toString(memory)));
+		Memory m = repository.findById(memory).get();
+		List<Picture> p = new ArrayList<Picture>();
+		List<Video> v = new ArrayList<Video>();
+		Set<Tag> t = new HashSet<Tag>();
+		for (String s : pictures) {
+			Picture picture = new Picture(s, m);
+			picture_repository.save(picture);
+			p.add(picture);
+		}
+		for (String s : videos) {
+			Video video = new Video(s, m);
+			video_repository.save(video);
+			v.add(video);
+		}
+		for (String s : tags) {
+			Tag tag = new Tag(s);
+			if (!tag_repository.findById(s).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
+				tag_repository.save(tag);
+			}
+			t.add(tag);
+		}
+		return repository.findById(m.getMemory_id()).map(record -> {
+			record.setPictures(p);
+			record.setVideos(v);
+			record.setTags(t);
+			Memory updated = repository.save(record);
+			return ResponseEntity.ok().body(updated);
+		}).orElse(ResponseEntity.notFound().build());
+	}
+
+	@RequestMapping("ViewStory/{story}")
+	public HashMap<Integer, List<String[]>> ViewStory2(@PathVariable("story") long story) {
+		logRepository.save(new AppLogs(new Date(), name, "ViewStory", LogStatus.SUCCESS.name(),
+				"story id : " + Long.toString(story)));
+		List<Integer> relevantYears = ViewStoryHelperMethod(story);
+		HashMap<Integer, List<String[]>> hm = new HashMap<Integer, List<String[]>>();
+		for (Integer year : relevantYears) {
+			hm.put(year, repository.ViewStory(story, year));
+		}
+		return hm;
+	}
+
+	@RequestMapping("ViewStoryHelperMethod/{story}")
+	public List<Integer> ViewStoryHelperMethod(@PathVariable long story) {
+		logRepository.save(new AppLogs(new Date(), name, "ViewStoryHelperMethod", LogStatus.SUCCESS.name(),
+				"story id : " + Long.toString(story)));
+		return repository.ViewStoryHelperMethod(story);
 	}
 
 }

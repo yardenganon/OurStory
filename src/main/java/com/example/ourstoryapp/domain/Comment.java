@@ -33,20 +33,27 @@ public class Comment {
 	@JoinColumn(name = "users")
 	@JsonIgnore
 	private User users;
-	
+
 	@ManyToMany(cascade = CascadeType.MERGE)
 	@JoinTable(name = "tag_in_comment", joinColumns = @JoinColumn(name = "comment_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "tag_name", referencedColumnName = "tag_name"))
 	@JsonIgnore
 	private Set<Tag> tags;
-	
+
 	private Date createDate;
 	private String text;
-
-
 
 	public Comment() {
 		// super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public Comment(Memory memory, User users, Set<Tag> tags, Date createDate, String text) {
+		super();
+		this.memory = memory;
+		this.users = users;
+		this.tags = tags;
+		this.createDate = createDate;
+		this.text = text;
 	}
 
 	public Comment(Memory memory, User users, String text) {
@@ -111,6 +118,5 @@ public class Comment {
 	public void setText(String text) {
 		this.text = text;
 	}
-	
 
 }

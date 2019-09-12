@@ -2,9 +2,8 @@ package com.example.ourstoryapp;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -84,17 +83,31 @@ public class OurstoryappApplication {
 //			Story s = new Story(u, "fadi", new Date(), new Date(), null);
 //			story_repository.save(s);
 
-			Memory memory = new Memory();
-			List<String> pictures = new ArrayList<>();
-			List<String> videos = new ArrayList<>();
-			List<String> tags = new ArrayList<>();
+//			Optional<Memory> memory = memory_repository.findById((long) 60);
+//			List<String> pictures = new ArrayList<>();
+//			List<String> videos = new ArrayList<>();
+//			List<String> tags = new ArrayList<>();
 //			pictures.add("www.google1.com");
 //			pictures.add("www.google2.com");
+//			pictures.add("www.google3.com");
 //			videos.add("www.google1.com");
 //			videos.add("www.google2.com");
-			tags.add("happy");
-			tags.add("fun");
-			memoryController.createMemory(memory, pictures, videos, tags);
+//			tags.add("happy");
+//			tags.add("fun");
+//			memoryController.createMemory(memory.get(), pictures, videos, tags);
+//			Optional<Memory> memory = memory_repository.findById((long) 76);
+//			Set<Tag> tags = new HashSet<>();
+//			comment_repository.save(new Comment(memory.get(), user_repository.findById((long) 3).get(), tags,
+//					new Date(), "Great Memory!"));
+//			List<String> pictures = new ArrayList<>();
+//			List<String> videos = new ArrayList<>();
+//			List<String> tags = new ArrayList<>();
+//			pictures.add("www.google1.com");
+//			pictures.add("www.google2.com");
+//			pictures.add("www.google3.com");
+//			videos.add("www.google1.com");
+//			videos.add("www.google2.com");
+//			memoryController.addMediaToMemory(60, pictures, videos, tags);
 		};
 	}
 
