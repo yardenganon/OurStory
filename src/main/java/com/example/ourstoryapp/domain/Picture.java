@@ -14,23 +14,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Picture {
-	
-	
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
-	
+
+	private String link;
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "memory")
 	@JsonIgnore
 	private Memory memory;
-	
-	private String link;
-	
-	
-	
+
 	public Picture() {
 
 	}
@@ -40,6 +35,7 @@ public class Picture {
 		this.link = link;
 		this.memory = memory;
 	}
+
 
 	public String getLink() {
 		return link;
@@ -56,8 +52,7 @@ public class Picture {
 	public void setMemory(Memory memory) {
 		this.memory = memory;
 	}
-	
-	
+
 	public long getId() {
 		return id;
 	}
@@ -65,9 +60,5 @@ public class Picture {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
-	
-	
-	
 
 }
