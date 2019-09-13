@@ -162,7 +162,7 @@ public class MemoryController {
 		}).orElse(ResponseEntity.notFound().build());
 	}
 
-	@PostMapping(value = "/createMemory")
+	@PostMapping(value = "/createMemory/{pictures}/{videos}/{tags}")
 	public ResponseEntity<Memory> createMemory(@RequestBody Memory memory,
 			@PathVariable("pictures") List<String> pictures, @PathVariable("videos") List<String> videos,
 			@PathVariable("tags") List<String> tags) {
