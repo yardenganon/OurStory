@@ -78,7 +78,7 @@ public class OurstoryappApplication {
 
 			// like_repository.save(l1);
 //			User u = new User();
-//			user_repository.save(u);
+//			user_repository.s	ave(u);
 //
 //			Story s = new Story(u, "fadi", new Date(), new Date(), null);
 //			story_repository.save(s);
