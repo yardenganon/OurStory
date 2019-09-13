@@ -163,8 +163,9 @@ public class MemoryController {
 	}
 
 	@PostMapping(value = "/createMemory")
-	public ResponseEntity<Memory> createMemory(@RequestBody Memory memory, @RequestBody List<String> pictures,
-			@RequestBody List<String> videos, @RequestBody List<String> tags) {
+	public ResponseEntity<Memory> createMemory(@RequestBody Memory memory,
+			@PathVariable("pictures") List<String> pictures, @PathVariable("videos") List<String> videos,
+			@PathVariable("tags") List<String> tags) {
 		logRepository.save(new AppLogs(new Date(), name, "createMemory", LogStatus.SUCCESS.name(), memory.toString()));
 		Memory m = repository.save(memory);
 		List<Picture> p = new ArrayList<Picture>();

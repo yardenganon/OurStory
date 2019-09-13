@@ -78,12 +78,12 @@ public class OurstoryappApplication {
 
 			// like_repository.save(l1);
 //			User u = new User();
-//			user_repository.save(u);
+//			user_repository.s	ave(u);
 //
 //			Story s = new Story(u, "fadi", new Date(), new Date(), null);
 //			story_repository.save(s);
 
-//			Optional<Memory> memory = memory_repository.findById((long) 60);
+//			Memory memory = new Memory();
 //			List<String> pictures = new ArrayList<>();
 //			List<String> videos = new ArrayList<>();
 //			List<String> tags = new ArrayList<>();
@@ -94,7 +94,7 @@ public class OurstoryappApplication {
 //			videos.add("www.google2.com");
 //			tags.add("happy");
 //			tags.add("fun");
-//			memoryController.createMemory(memory.get(), pictures, videos, tags);
+//			memoryController.createMemory(memory, pictures, videos, tags);
 //			Optional<Memory> memory = memory_repository.findById((long) 76);
 //			Set<Tag> tags = new HashSet<>();
 //			comment_repository.save(new Comment(memory.get(), user_repository.findById((long) 3).get(), tags,
