@@ -245,6 +245,54 @@ public class MemoryController {
 		}).orElse(ResponseEntity.notFound().build());
 	}
 
+	@PostMapping(value = "/setMediaToMemory/{id}")
+	public ResponseEntity<Memory> setMediaToMemory(@PathVariable("id") long memory,
+			@RequestBody HashMap<String, List<String>> hm) {
+		logRepository.save(
+				new AppLogs(new Date(), name, "setMediaToMemory", LogStatus.SUCCESS.name(), Long.toString(memory)));
+		Memory m = repository.findById(memory).get();
+		List<String> pictures = hm.get("pictures");
+		List<String> videos = hm.get("videos");
+		List<String> tags = hm.get("tags");
+		pictures = hm.get("pictures");
+		List<Picture> p = new ArrayList<Picture>();
+		List<Video> v = new ArrayList<Video>();
+		Set<Tag> t = new HashSet<Tag>();
+		if (pictures != null)
+			for (String s : pictures) {
+				Picture picture = new Picture(s, m);
+				picture_repository.save(picture);
+				p.add(picture);
+			}
+		if (videos != null)
+			for (String s : videos) {
+				Video video = new Video(s, m);
+				video_repository.save(video);
+				v.add(video);
+			}
+		if (tags != null)
+			for (String s : tags) {
+				Tag tag = new Tag(s);
+				if (!tag_repository.findById(s).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
+					tag_repository.save(tag);
+				}
+				t.add(tag);
+			}
+		return repository.findById(m.getMemory_id()).map(record -> {
+			List<Picture> pics = new ArrayList<>();
+			List<Video> vids = new ArrayList<>();
+			Set<Tag> tag = new HashSet<>();
+			pics.addAll(p);
+			vids.addAll(v);
+			tag.addAll(t);
+			record.setPictures(pics);
+			record.setVideos(vids);
+			record.setTags(tag);
+			Memory updated = repository.save(record);
+			return ResponseEntity.ok().body(updated);
+		}).orElse(ResponseEntity.notFound().build());
+	}
+
 	@RequestMapping("ViewStory/{story}")
 	public HashMap<Integer, List<String[]>> ViewStory(@PathVariable("story") long story) {
 		logRepository.save(new AppLogs(new Date(), name, "ViewStory", LogStatus.SUCCESS.name(),
