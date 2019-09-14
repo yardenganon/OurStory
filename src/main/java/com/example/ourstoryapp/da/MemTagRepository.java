@@ -14,7 +14,4 @@ import com.example.ourstoryapp.domain.Tag;
 public interface MemTagRepository extends CrudRepository <Tag,String>{
 	
 
-	
-	
-
 }
