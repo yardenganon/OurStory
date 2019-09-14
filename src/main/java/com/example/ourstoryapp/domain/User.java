@@ -2,62 +2,54 @@ package com.example.ourstoryapp.domain;
 
 import java.net.URI;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Past;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long user_id;
-	
+
 	private String email;
 
 	private String first_name;
 	private String last_name;
 	private String password;
 	private String gender;
-	
+
 	private Date date_of_birth;
 	private Date date_of_sign_up;
 	private Date date_of_last_sign_in;
 	private String state;
 	private String city;
 	private boolean status;
-	
+
 	private URI profile_picture;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
 	private List<Comment> comments;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
 	private List<Likes> likes;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "contributer")
 	private List<Memory> memories;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
 	private List<Story> owners;
-	
-
 
 	public User() {
-		
+
 	}
 
 	public User(String first_name, String last_name, String password) {
@@ -66,7 +58,7 @@ public class User {
 		this.last_name = last_name;
 		this.password = password;
 		this.date_of_sign_up = new Date();
-		
+
 	}
 
 	public long getUser_id() {
