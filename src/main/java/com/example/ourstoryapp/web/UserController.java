@@ -52,11 +52,13 @@ public class UserController {
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<User> findById(@PathVariable(value = "id") long userId) {
 		if ((repository.findById(userId).map(record -> ResponseEntity.ok().body(record))).isPresent()) {
-			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.SUCCESS.name(), Long.toString(userId)));
+			logRepository
+					.save(new AppLogs(new Date(), name, "findById", LogStatus.SUCCESS.name(), Long.toString(userId)));
 			return repository.findById(userId).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.FAILURE.name(), Long.toString(userId)));
+			logRepository
+					.save(new AppLogs(new Date(), name, "findById", LogStatus.FAILURE.name(), Long.toString(userId)));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -77,13 +79,15 @@ public class UserController {
 	@PostMapping("/create")
 	public User create(@Valid @RequestBody User user) {
 		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), user.toString()));
+		user.setDate_of_sign_up(new Date());
 		return repository.save(user);
 	}
 
 	@PutMapping(value = "/updatePassword")
 	public ResponseEntity<User> updatePassword(@PathVariable("id") long id) {
-		if(repository.findById(id).isPresent()) {
-			logRepository.save(new AppLogs(new Date(), name, "updatePassword", LogStatus.SUCCESS.name(), Long.toString(id)));
+		if (repository.findById(id).isPresent()) {
+			logRepository
+					.save(new AppLogs(new Date(), name, "updatePassword", LogStatus.SUCCESS.name(), Long.toString(id)));
 			return repository.findById(id).map(record -> {
 				String password = new Random().ints(10, 33, 122).mapToObj(i -> String.valueOf((char) i))
 						.collect(Collectors.joining());
@@ -91,9 +95,9 @@ public class UserController {
 				User updated = repository.save(record);
 				return ResponseEntity.ok().body(updated);
 			}).orElse(ResponseEntity.notFound().build());
-		}
-		else {
-			logRepository.save(new AppLogs(new Date(), name, "updatePassword", LogStatus.FAILURE.name(), Long.toString(id)));
+		} else {
+			logRepository
+					.save(new AppLogs(new Date(), name, "updatePassword", LogStatus.FAILURE.name(), Long.toString(id)));
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -102,13 +106,15 @@ public class UserController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long userId) {
 		if ((repository.findById(userId).map(record -> ResponseEntity.ok().body(record))).isPresent()) {
-			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.SUCCESS.name(), Long.toString(userId)));
+			logRepository
+					.save(new AppLogs(new Date(), name, "delete", LogStatus.SUCCESS.name(), Long.toString(userId)));
 			repository.deleteById(userId);
 			return ResponseEntity.ok().build();
 		}
 
 		else {
-			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.FAILURE.name(), Long.toString(userId)));
+			logRepository
+					.save(new AppLogs(new Date(), name, "delete", LogStatus.FAILURE.name(), Long.toString(userId)));
 			return ResponseEntity.notFound().build();
 		}
 	}

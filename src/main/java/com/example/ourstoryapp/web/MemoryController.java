@@ -1,11 +1,9 @@
 package com.example.ourstoryapp.web;
 
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -60,6 +58,7 @@ public class MemoryController {
 	@PostMapping("/create")
 	public Memory create(@Valid @RequestBody Memory memory) {
 		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), memory.toString()));
+		memory.setCreate_date(new Date());
 		return repository.save(memory);
 	}
 
