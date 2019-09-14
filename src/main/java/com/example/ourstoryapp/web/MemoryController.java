@@ -31,6 +31,7 @@ import com.example.ourstoryapp.domain.Memory;
 import com.example.ourstoryapp.domain.Picture;
 import com.example.ourstoryapp.domain.Tag;
 import com.example.ourstoryapp.domain.Video;
+import com.example.ourstoryapp.domain.ViewStoryObject;
 
 @RestController
 @RequestMapping("/memories")
@@ -296,15 +297,23 @@ public class MemoryController {
 	}
 
 	@RequestMapping("ViewStory/{story}")
-	public HashMap<Integer, List<String[]>> ViewStory(@PathVariable("story") long story) {
+	public List<ViewStoryObject> ViewStory(@PathVariable("story") long story) {
 		logRepository.save(new AppLogs(new Date(), name, "ViewStory", LogStatus.SUCCESS.name(),
 				"story id : " + Long.toString(story)));
 		List<Integer> relevantYears = ViewStoryHelperMethod(story);
-		HashMap<Integer, List<String[]>> hm = new HashMap<Integer, List<String[]>>();
-		for (Integer year : relevantYears) {
-			hm.put(year, repository.ViewStory(story, year));
-		}
-		return hm;
+		ViewStoryObject vso = null;
+		List<ViewStoryObject> arr = new ArrayList<>();
+		if (relevantYears != null)
+			for (Integer year : relevantYears) {
+				if (year != null) {
+					vso = new ViewStoryObject(year);
+					List<String[]> pics = repository.ViewStory(story, year);
+					if (pics != null)
+						vso.setPics(pics);
+				}
+				arr.add(vso);
+			}
+		return arr;
 	}
 
 	@RequestMapping("ViewStoryHelperMethod/{story}")
