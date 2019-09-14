@@ -53,7 +53,6 @@ public class Memory {
 	private Set<Tag> tags;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
-	@JsonIgnore
 	private List<Likes> likes;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
@@ -61,7 +60,6 @@ public class Memory {
 	private List<Picture> pictures;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "memory")
-	@JsonIgnore
 	private List<Video> videos;
 
 	public Memory() {
