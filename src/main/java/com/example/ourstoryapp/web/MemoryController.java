@@ -197,36 +197,49 @@ public class MemoryController {
 		}).orElse(ResponseEntity.notFound().build());
 	}
 
-	@PostMapping(value = "/addMediaToMemory")
-	public ResponseEntity<Memory> addMediaToMemory(@PathVariable long memory, @RequestBody List<String> pictures,
-			@RequestBody List<String> videos, @RequestBody List<String> tags) {
+	@PostMapping(value = "/addMediaToMemory/{id}")
+	public ResponseEntity<Memory> addMediaToMemory(@PathVariable("id") long memory,
+			@RequestBody HashMap<String, List<String>> hm) {
 		logRepository.save(
 				new AppLogs(new Date(), name, "addMediaToMemory", LogStatus.SUCCESS.name(), Long.toString(memory)));
 		Memory m = repository.findById(memory).get();
+		List<String> pictures = hm.get("pictures");
+		List<String> videos = hm.get("videos");
+		List<String> tags = hm.get("tags");
+		pictures = hm.get("pictures");
 		List<Picture> p = new ArrayList<Picture>();
 		List<Video> v = new ArrayList<Video>();
 		Set<Tag> t = new HashSet<Tag>();
-		for (String s : pictures) {
-			Picture picture = new Picture(s, m);
-			picture_repository.save(picture);
-			p.add(picture);
-		}
-		for (String s : videos) {
-			Video video = new Video(s, m);
-			video_repository.save(video);
-			v.add(video);
-		}
-		for (String s : tags) {
-			Tag tag = new Tag(s);
-			if (!tag_repository.findById(s).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
-				tag_repository.save(tag);
+		if (pictures != null)
+			for (String s : pictures) {
+				Picture picture = new Picture(s, m);
+				picture_repository.save(picture);
+				p.add(picture);
 			}
-			t.add(tag);
-		}
+		if (videos != null)
+			for (String s : videos) {
+				Video video = new Video(s, m);
+				video_repository.save(video);
+				v.add(video);
+			}
+		if (tags != null)
+			for (String s : tags) {
+				Tag tag = new Tag(s);
+				if (!tag_repository.findById(s).map(record -> ResponseEntity.ok().body(record)).isPresent()) {
+					tag_repository.save(tag);
+				}
+				t.add(tag);
+			}
 		return repository.findById(m.getMemory_id()).map(record -> {
-			record.setPictures(p);
-			record.setVideos(v);
-			record.setTags(t);
+			List<Picture> pics = record.getPictures();
+			List<Video> vids = record.getVideos();
+			Set<Tag> tag = record.getTags();
+			pics.addAll(p);
+			vids.addAll(v);
+			tag.addAll(t);
+			record.setPictures(pics);
+			record.setVideos(vids);
+			record.setTags(tag);
 			Memory updated = repository.save(record);
 			return ResponseEntity.ok().body(updated);
 		}).orElse(ResponseEntity.notFound().build());
