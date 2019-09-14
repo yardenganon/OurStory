@@ -250,6 +250,9 @@ public class MemoryController {
 			@RequestBody HashMap<String, List<String>> hm) {
 		logRepository.save(
 				new AppLogs(new Date(), name, "setMediaToMemory", LogStatus.SUCCESS.name(), Long.toString(memory)));
+		repository.DeleteAllPicsInMemory(memory);
+		repository.DeleteAllVideosInMemory(memory);
+		repository.DeleteAllTagsInMemory(memory);
 		Memory m = repository.findById(memory).get();
 		List<String> pictures = hm.get("pictures");
 		List<String> videos = hm.get("videos");
