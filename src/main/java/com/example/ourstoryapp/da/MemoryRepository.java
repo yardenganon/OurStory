@@ -2,14 +2,14 @@ package com.example.ourstoryapp.da;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.ourstoryapp.domain.Memory;
-import com.example.ourstoryapp.domain.Picture;
-import com.example.ourstoryapp.domain.Tag;
 
 @RepositoryRestResource
 public interface MemoryRepository extends JpaRepository<Memory, Long> {
@@ -35,6 +35,18 @@ public interface MemoryRepository extends JpaRepository<Memory, Long> {
 	@Query(value = "SELECT DISTINCT Picture.* FROM Picture inner join Memory on Picture.memory = Memory.memory_id WHERE Memory.story=?1 AND EXTRACT (year FROM Memory.memory_date) =?2 LIMIT 3", nativeQuery = true)
 	List<String[]> ViewStory(long story, int year);
 
+	@Modifying
+	@Transactional
+	@Query(value = "DELETE FROM TAG_IN_MEMORY WHERE TAG_IN_MEMORY.memory_id=?1 ", nativeQuery = true)
+	void DeleteAllTagsInMemory(long memory);
+	@Modifying
+	@Transactional
+	@Query(value = "DELETE FROM VIDEO WHERE VIDEO.memory=?1 ", nativeQuery = true)
+	void DeleteAllPicsInMemory(long memory);
+	@Modifying
+	@Transactional
+	@Query(value = "DELETE FROM PICTURE WHERE PICTURE.memory=?1 ", nativeQuery = true)
+	void DeleteAllVideosInMemory(long memory);
 	// get memories by words in description of memory
 
 }
