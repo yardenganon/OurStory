@@ -14,8 +14,4 @@ import com.example.ourstoryapp.domain.Tag;
 public interface MemTagRepository extends CrudRepository <Tag,String>{
 	
 
-	
-	@Query(value = "DELETE FROM tag_in_memory WHERE tag_in_memory.memory_id=?1 ", nativeQuery = true)
-	List<String[]> ViewStory(long memory);
-
 }
