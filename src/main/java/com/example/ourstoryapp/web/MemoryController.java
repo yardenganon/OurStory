@@ -323,4 +323,6 @@ public class MemoryController {
 		return repository.ViewStoryHelperMethod(story);
 	}
 
+	
+	
 }
