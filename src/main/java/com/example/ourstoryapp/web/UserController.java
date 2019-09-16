@@ -149,12 +149,13 @@ public class UserController {
 
 	@RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
 	public ResponseEntity<Object> resetPassword(@RequestParam("mail") String mail) {
-		User u = findByEmail(mail);
+		String lowerCaseMail = mail.toLowerCase();
+		User u = findByEmail(lowerCaseMail);
 		if (u == null) {
 			return ResponseEntity.notFound().build();
 		} else {
 			updatePassword(u.getUser_id());
-			u = findByEmail(mail);
+			u = findByEmail(lowerCaseMail);
 			String recipient = mail;
 			String message = u.getPassword();
 			mailClient.prepareAndSend(recipient, message);
