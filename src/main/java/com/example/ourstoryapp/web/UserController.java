@@ -75,11 +75,11 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/login/{mail}/{password}")
-	public User login(@PathVariable(value = "mail") String mail, @PathVariable(value = "password") String password) {
+	@GetMapping("/login")
+	public User login(@RequestParam(value = "mail") String mail, @RequestParam(value = "password") String password) {
 		String lowerCaseMail = mail.toLowerCase();
 		if ((repository.findByEmail(lowerCaseMail)) != null
-				&& (repository.findByEmail(lowerCaseMail).getPassword() == password)) {
+				&& (repository.findByEmail(lowerCaseMail).getPassword().equals(password))) {
 			logRepository.save(new AppLogs(new Date(), name, "findByEmail", LogStatus.SUCCESS.name(), lowerCaseMail));
 			return repository.findByEmail(lowerCaseMail);
 		} else {
