@@ -62,14 +62,11 @@ public class UserController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
-	
-	
 
 	// get user by Email
 	@GetMapping("/findByEmail/{mail}")
 	public User findByEmail(@PathVariable(value = "mail") String mail) {
-		if ((repository.findByEmail(mail)) != null) {
+		if ((repository.findByEmail(mail.toLowerCase())) != null) {
 			logRepository.save(new AppLogs(new Date(), name, "findByEmail", LogStatus.SUCCESS.name(), mail));
 			return repository.findByEmail(mail);
 		} else {
@@ -78,33 +75,34 @@ public class UserController {
 		}
 	}
 
-	
 	@GetMapping("/login/{mail}/{password}")
-	public User login(@PathVariable(value = "mail") String mail,@PathVariable(value = "password") String password) {
-		if ((repository.findByEmail(mail)) != null && (repository.findByEmail(mail).getPassword() == password)) {
-			logRepository.save(new AppLogs(new Date(), name, "findByEmail", LogStatus.SUCCESS.name(), mail));
-			return repository.findByEmail(mail);
+	public User login(@PathVariable(value = "mail") String mail, @PathVariable(value = "password") String password) {
+		String lowerCaseMail = mail.toLowerCase();
+		if ((repository.findByEmail(lowerCaseMail)) != null
+				&& (repository.findByEmail(mail).getPassword() == password)) {
+			logRepository.save(new AppLogs(new Date(), name, "findByEmail", LogStatus.SUCCESS.name(), lowerCaseMail));
+			return repository.findByEmail(lowerCaseMail);
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "findByEmail", LogStatus.FAILURE.name(), mail));
+			logRepository.save(new AppLogs(new Date(), name, "findByEmail", LogStatus.FAILURE.name(), lowerCaseMail));
 			return null;
 		}
 	}
+
 	// create new instance of User (Create)
 	@PostMapping("/create")
 	public User create(@Valid @RequestBody User user) {
 		if (repository.findByEmail(user.getEmail()) == null) {
 			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), user.toString()));
 			user.setDate_of_sign_up(new Date());
+			user.setEmail(user.getEmail().toLowerCase());
 			return repository.save(user);
-		}
-		else {
+		} else {
 			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.FAILURE.name(), user.toString()));
 			return null;
 		}
-			
+
 	}
 
-	
 //	// create new instance of User (Create)
 //	@PostMapping("/login")
 //	public User create(@Valid @RequestBody User user) {
@@ -112,8 +110,7 @@ public class UserController {
 //		user.setDate_of_sign_up(new Date());
 //		return repository.save(user);
 //	}
-	
-	
+
 	@PutMapping(value = "/updatePassword")
 	public ResponseEntity<User> updatePassword(@PathVariable("id") long id) {
 		if (repository.findById(id).isPresent()) {
