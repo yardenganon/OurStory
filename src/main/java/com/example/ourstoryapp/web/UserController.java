@@ -78,11 +78,28 @@ public class UserController {
 	// create new instance of User (Create)
 	@PostMapping("/create")
 	public User create(@Valid @RequestBody User user) {
-		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), user.toString()));
-		user.setDate_of_sign_up(new Date());
-		return repository.save(user);
+		if (repository.findByEmail(user.getEmail()) == null) {
+			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), user.toString()));
+			user.setDate_of_sign_up(new Date());
+			return repository.save(user);
+		}
+		else {
+			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.FAILURE.name(), user.toString()));
+			return null;
+		}
+			
 	}
 
+	
+//	// create new instance of User (Create)
+//	@PostMapping("/login")
+//	public User create(@Valid @RequestBody User user) {
+//		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), user.toString()));
+//		user.setDate_of_sign_up(new Date());
+//		return repository.save(user);
+//	}
+	
+	
 	@PutMapping(value = "/updatePassword")
 	public ResponseEntity<User> updatePassword(@PathVariable("id") long id) {
 		if (repository.findById(id).isPresent()) {
