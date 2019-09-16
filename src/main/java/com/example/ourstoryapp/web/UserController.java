@@ -79,7 +79,7 @@ public class UserController {
 	public User login(@PathVariable(value = "mail") String mail, @PathVariable(value = "password") String password) {
 		String lowerCaseMail = mail.toLowerCase();
 		if ((repository.findByEmail(lowerCaseMail)) != null
-				&& (repository.findByEmail(mail).getPassword() == password)) {
+				&& (repository.findByEmail(lowerCaseMail).getPassword() == password)) {
 			logRepository.save(new AppLogs(new Date(), name, "findByEmail", LogStatus.SUCCESS.name(), lowerCaseMail));
 			return repository.findByEmail(lowerCaseMail);
 		} else {
