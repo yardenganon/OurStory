@@ -62,6 +62,9 @@ public class UserController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+	
+	
+	
 
 	// get user by Email
 	@GetMapping("/findByEmail/{mail}")
@@ -75,6 +78,17 @@ public class UserController {
 		}
 	}
 
+	
+	@GetMapping("/login/{mail}/{password}")
+	public User login(@PathVariable(value = "mail") String mail,@PathVariable(value = "password") String password) {
+		if ((repository.findByEmail(mail)) != null && (repository.findByEmail(mail).getPassword() == password)) {
+			logRepository.save(new AppLogs(new Date(), name, "findByEmail", LogStatus.SUCCESS.name(), mail));
+			return repository.findByEmail(mail);
+		} else {
+			logRepository.save(new AppLogs(new Date(), name, "findByEmail", LogStatus.FAILURE.name(), mail));
+			return null;
+		}
+	}
 	// create new instance of User (Create)
 	@PostMapping("/create")
 	public User create(@Valid @RequestBody User user) {
