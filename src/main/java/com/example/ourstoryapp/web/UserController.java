@@ -117,7 +117,7 @@ public class UserController {
 			logRepository
 					.save(new AppLogs(new Date(), name, "updatePassword", LogStatus.SUCCESS.name(), Long.toString(id)));
 			return repository.findById(id).map(record -> {
-				String password = new Random().ints(10, 33, 122).mapToObj(i -> String.valueOf((char) i))
+				String password = new Random().ints(6, 33, 122).mapToObj(i -> String.valueOf((char) i))
 						.collect(Collectors.joining());
 				record.setPassword(password);
 				User updated = repository.save(record);
