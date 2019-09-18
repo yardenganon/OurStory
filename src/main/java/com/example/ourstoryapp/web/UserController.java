@@ -80,6 +80,7 @@ public class UserController {
 		String lowerCaseMail = mail.toLowerCase();
 		if ((repository.findByEmail(lowerCaseMail)) != null
 				&& (repository.findByEmail(lowerCaseMail).getPassword().equals(password))) {
+			repository.findByEmail(lowerCaseMail).setDate_of_last_sign_in(new Date());
 			logRepository.save(new AppLogs(new Date(), name, "findByEmail", LogStatus.SUCCESS.name(), lowerCaseMail));
 			return repository.findByEmail(lowerCaseMail);
 		} else {
@@ -95,6 +96,7 @@ public class UserController {
 			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), user.toString()));
 			user.setDate_of_sign_up(new Date());
 			user.setEmail(user.getEmail().toLowerCase());
+			user.setDate_of_last_sign_in(new Date());
 			return repository.save(user);
 		} else {
 			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.FAILURE.name(), user.toString()));
