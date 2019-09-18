@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ourstoryapp.da.CommentRepository;
 import com.example.ourstoryapp.da.LogRepository;
+import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.domain.AppLogs;
 import com.example.ourstoryapp.domain.Comment;
 import com.example.ourstoryapp.domain.LogStatus;
@@ -33,6 +34,8 @@ public class CommentController {
 	CommentRepository repository;
 	@Autowired
 	private LogRepository logRepository;
+	@Autowired
+	private MemoryRepository memRepository;
 
 	final String name = CommentController.class.getName();
 
@@ -42,11 +45,19 @@ public class CommentController {
 		return repository.findAll();
 	}
 
-	@PostMapping("/create")
-	public Comment create(@Valid @RequestBody Comment comment) {
-		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), comment.toString()));
+	@PostMapping("/create/{id}")
+	public Comment create(@PathVariable(value = "id") long id, @Valid @RequestBody Comment comment) {
 		comment.setCreateDate(new Date());
-		return repository.save(comment);
+		Memory m = memRepository.findById(id).get();
+		if (m == null) {
+			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.FAILURE.name(), comment.toString()));
+			return null;
+
+		} else {
+			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), comment.toString()));
+			comment.setMemory(m);
+			return repository.save(comment);
+		}
 	}
 
 	@GetMapping("/findById/{id}")
