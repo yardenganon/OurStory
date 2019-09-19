@@ -11,7 +11,7 @@ import com.example.ourstoryapp.domain.Story;
 @RepositoryRestResource
 public interface StoryRepository extends JpaRepository <Story ,Long> { 
 
-	@Query(value = "SELECT STORY.* FROM STORY WHERE Story.name_of_person LIKE concat('%',?1,'%')", nativeQuery = true)
+	@Query(value = "SELECT STORY.* FROM STORY WHERE LOWER(Story.name_of_person) LIKE concat('%',LOWER(?1),'%')", nativeQuery = true)
 	List<Story> findStoriesByKeyword(String name_of_person);
 	// find story by full date date of birth
 	@Query(value = "SELECT Story.* FROM Story WHERE EXTRACT (day FROM Story.date_of_birth) = ?1  AND EXTRACT (month FROM Story.date_of_birth) = ?2 AND EXTRACT (year FROM Story.date_of_birth) = ?3", nativeQuery = true)
