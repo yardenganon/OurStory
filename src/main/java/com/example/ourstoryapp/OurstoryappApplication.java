@@ -1,10 +1,5 @@
 package com.example.ourstoryapp;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,8 +12,8 @@ import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.da.StoryRepository;
 import com.example.ourstoryapp.da.TagRepository;
 import com.example.ourstoryapp.da.UserRepository;
-import com.example.ourstoryapp.domain.Memory;
 import com.example.ourstoryapp.web.MemoryController;
+import com.example.ourstoryapp.web.UserController;
 
 @SpringBootApplication
 public class OurstoryappApplication {
@@ -38,6 +33,10 @@ public class OurstoryappApplication {
 	private TagRepository tag_repository;
 	@Autowired
 	private MemoryController memoryController;
+	
+	
+	@Autowired
+	private UserController uc;
 
 //	private static final Logger logger = LoggerFactory.getLogger(OurstoryappApplication.class);
 //	Logger log = LogManager.getLogger(LoggingController.class);
@@ -47,17 +46,23 @@ public class OurstoryappApplication {
 
 		// test
 		// logger.info("Hello Spring Boot");
+		
+
+		
 	}
 
 	@Bean
 	CommandLineRunner runner() {
 		return args -> {
+			
+			
+//			for (User u: user_repository.findAll())
+//			{
+//				if (u.getPassword() != null && u.getPassword().length()<=15)
+//				uc.update(u.getUser_id(), u.getPassword());
+//			}
 			// Place your code here
 
-			@SuppressWarnings("deprecation")
-			Date d1 = new Date(1992, 1, 1);
-			@SuppressWarnings("deprecation")
-			Date d2 = new Date(2019, 26, 8);
 			// Memory m1 = new Memory(1,"Memory one is the first picture I have of
 			// him",d1,null);
 			// Comment c1 = new Comment(m1,d2,"I don't know him but, Rest in peace");
@@ -108,6 +113,7 @@ public class OurstoryappApplication {
 //			videos.add("www.google1.com");
 //			videos.add("www.google2.com");
 //			memoryController.addMediaToMemory(60, pictures, videos, tags);
+			
 		};
 	}
 
