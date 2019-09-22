@@ -171,23 +171,7 @@ public class UserController {
 	}
 
 	
-	
-	@PutMapping(value = "/updatepass/{id}/{pass}")
-    public ResponseEntity<User> update(@PathVariable("id") long id,@PathVariable("pass")String pass) {
-        if (repository.findById(id).isPresent()) {
-        
-            return repository.findById(id).map(record -> {
-                record.setPassword(Hashing.sha256()
-						  .hashString(pass, StandardCharsets.UTF_8)
-						  .toString());
-                User updated = repository.save(record);
-                return ResponseEntity.ok().body(updated);
-            }).orElse(ResponseEntity.notFound().build());
-        } else {
-            
-            return ResponseEntity.notFound().build();
-        }
-    }
+
 
 
 }
