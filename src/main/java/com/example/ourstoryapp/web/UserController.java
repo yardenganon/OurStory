@@ -147,6 +147,7 @@ public class UserController {
 			u.setPassword(Hashing.sha256()
 						  .hashString(u.getPassword(), StandardCharsets.UTF_8)
 						  .toString());
+			repository.save(u);
 			
 			return ResponseEntity.ok().build();
 		}
