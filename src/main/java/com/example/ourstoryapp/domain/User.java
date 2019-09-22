@@ -12,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -51,7 +54,9 @@ public class User {
 	public User() {
 
 	}
+	
 
+	
 	public User(String first_name, String last_name, String password) {
 		super();
 		this.first_name = first_name;

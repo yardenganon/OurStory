@@ -1,13 +1,12 @@
 package com.example.ourstoryapp.web;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,11 +26,12 @@ import com.example.ourstoryapp.domain.AppLogs;
 import com.example.ourstoryapp.domain.LogStatus;
 import com.example.ourstoryapp.domain.User;
 import com.example.ourstoryapp.mail.MailClient;
+import com.google.common.hash.Hashing;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
+	
 	@Autowired
 	private UserRepository repository;
 	@Autowired
@@ -77,14 +77,17 @@ public class UserController {
 
 	@GetMapping("/login")
 	public User login(@RequestParam(value = "mail") String mail, @RequestParam(value = "password") String password) {
-		String lowerCaseMail = mail.toLowerCase();
+		String lowerCaseMail = mail.toLowerCase();		
 		if ((repository.findByEmail(lowerCaseMail)) != null
-				&& (repository.findByEmail(lowerCaseMail).getPassword().equals(password))) {
+				&& (repository.findByEmail(lowerCaseMail).getPassword().equals(Hashing.sha256()
+						  .hashString(password, StandardCharsets.UTF_8)
+						  .toString()))) {
 			repository.findByEmail(lowerCaseMail).setDate_of_last_sign_in(new Date());
 			logRepository.save(new AppLogs(new Date(), name, "findByEmail", LogStatus.SUCCESS.name(), lowerCaseMail));
 			return repository.findByEmail(lowerCaseMail);
 		} else {
 			logRepository.save(new AppLogs(new Date(), name, "findByEmail", LogStatus.FAILURE.name(), lowerCaseMail));
+			
 			return null;
 		}
 	}
@@ -97,6 +100,9 @@ public class UserController {
 			user.setDate_of_sign_up(new Date());
 			user.setEmail(user.getEmail().toLowerCase());
 			user.setDate_of_last_sign_in(new Date());
+			user.setPassword(Hashing.sha256()
+					  .hashString(user.getPassword(), StandardCharsets.UTF_8)
+					  .toString());
 			return repository.save(user);
 		} else {
 			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.FAILURE.name(), user.toString()));
@@ -105,14 +111,8 @@ public class UserController {
 
 	}
 
-//	// create new instance of User (Create)
-//	@PostMapping("/login")
-//	public User create(@Valid @RequestBody User user) {
-//		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), user.toString()));
-//		user.setDate_of_sign_up(new Date());
-//		return repository.save(user);
-//	}
-
+	/// Assumption: Only resetPassword function uses this function so the hashing isn't happening here (new password inserted un-hashed)
+	///// because new random password (6 digits long) sent to the client, after that we want to insert the hashed password to the DB
 	@PutMapping(value = "/updatePassword")
 	public ResponseEntity<User> updatePassword(@PathVariable("id") long id) {
 		if (repository.findById(id).isPresent()) {
@@ -132,6 +132,27 @@ public class UserController {
 		}
 	}
 
+	@RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
+	public ResponseEntity<Object> resetPassword(@RequestParam("mail") String mail) {
+		String lowerCaseMail = mail.toLowerCase();
+		User u = findByEmail(lowerCaseMail);
+		if (u == null) {
+			return ResponseEntity.notFound().build();
+		} else {
+			updatePassword(u.getUser_id());
+			u = findByEmail(lowerCaseMail);
+			String recipient = mail;
+			String message = u.getPassword();
+			mailClient.prepareAndSend(recipient, message);
+			u.setPassword(Hashing.sha256()
+						  .hashString(u.getPassword(), StandardCharsets.UTF_8)
+						  .toString());
+			
+			return ResponseEntity.ok().build();
+		}
+
+	}
+	
 	// delete story by ID (Delete)
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") long userId) {
@@ -149,21 +170,24 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
-	public ResponseEntity<Object> resetPassword(@RequestParam("mail") String mail) {
-		String lowerCaseMail = mail.toLowerCase();
-		User u = findByEmail(lowerCaseMail);
-		if (u == null) {
-			return ResponseEntity.notFound().build();
-		} else {
-			updatePassword(u.getUser_id());
-			u = findByEmail(lowerCaseMail);
-			String recipient = mail;
-			String message = u.getPassword();
-			mailClient.prepareAndSend(recipient, message);
-			return ResponseEntity.ok().build();
-		}
+	
+	
+	@PutMapping(value = "/updatepass/{id}/{pass}")
+    public ResponseEntity<User> update(@PathVariable("id") long id,@PathVariable("pass")String pass) {
+        if (repository.findById(id).isPresent()) {
+        
+            return repository.findById(id).map(record -> {
+                record.setPassword(Hashing.sha256()
+						  .hashString(pass, StandardCharsets.UTF_8)
+						  .toString());
+                User updated = repository.save(record);
+                return ResponseEntity.ok().body(updated);
+            }).orElse(ResponseEntity.notFound().build());
+        } else {
+            
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-	}
 
 }
