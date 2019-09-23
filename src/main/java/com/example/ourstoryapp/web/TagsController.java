@@ -23,77 +23,83 @@ import com.example.ourstoryapp.domain.AppLogs;
 import com.example.ourstoryapp.domain.LogStatus;
 import com.example.ourstoryapp.domain.Tag;
 
-@RestController 
+@RestController
 @RequestMapping("/tags")
 public class TagsController {
 
 	@Autowired
-    private TagRepository repository;
+	private TagRepository repository;
 	@Autowired
 	private LogRepository logRepository;
 
 	final String name = TagsController.class.getName();
 
-	//return all tags	
+	// return all tags
 	@RequestMapping("/findAll")
 	public Iterable<Tag> getTags() {
 		logRepository.save(new AppLogs(new Date(), name, "findAll", LogStatus.SUCCESS.name(), null));
 		return repository.findAll();
-    } 
-	
-	//delete tag
+	}
+
+	// delete tag
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") String tag_name) {
-		if((repository.findById(tag_name)).isPresent()) {
+		if ((repository.findById(tag_name)).isPresent()) {
 			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.SUCCESS.name(), tag_name));
 			return repository.findById(tag_name).map(record -> {
-			repository.deleteById(tag_name);
-			return ResponseEntity.ok().build();
-		}).orElse(ResponseEntity.notFound().build());
-		}
-		else {
+				repository.deleteById(tag_name);
+				return ResponseEntity.ok().build();
+			}).orElse(ResponseEntity.notFound().build());
+		} else {
 			logRepository.save(new AppLogs(new Date(), name, "delete", LogStatus.FAILURE.name(), tag_name));
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
-	//add tag
+
+	// add tag
 	@PostMapping("/create")
 	public Tag create(@Valid @RequestBody Tag tag) {
 		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), tag.toString()));
-		return repository.save(tag);	
+		return repository.save(tag);
 	}
-	
+
 	// find tag by name
 	@GetMapping("/findById/{id}")
-	public ResponseEntity<Tag> findByid( @PathVariable(value = "id") String tag_name) {
-		if((repository.findById(tag_name)).isPresent()) {
+	public ResponseEntity<Tag> findByid(@PathVariable(value = "id") String tag_name) {
+		if ((repository.findById(tag_name)).isPresent()) {
 			logRepository.save(new AppLogs(new Date(), name, "findByid", LogStatus.SUCCESS.name(), tag_name));
 			return repository.findById(tag_name).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
-		}
-		else {
+		} else {
 			logRepository.save(new AppLogs(new Date(), name, "findById", LogStatus.FAILURE.name(), tag_name));
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@RequestMapping("/findTop3TagsByStoryId")
 	public Iterable<String> findTop3TagsByStoryId(@RequestParam("storyId") long storyId) {
-		logRepository.save(new AppLogs(new Date(), name, "findTop3TagsByStoryId", LogStatus.SUCCESS.name(), Long.toString(storyId)));
+		logRepository.save(new AppLogs(new Date(), name, "findTop3TagsByStoryId", LogStatus.SUCCESS.name(),
+				Long.toString(storyId)));
 		return repository.findTop3TagsByStoryId(storyId);
 	}
-	
-	
+
 	@RequestMapping("/findTop5TagsByStoryId")
 	public Iterable<String> findTop5TagsByStoryId(@RequestParam("storyId") long storyId) {
-		logRepository.save(new AppLogs(new Date(), name, "findTop5TagsByStoryId", LogStatus.SUCCESS.name(), Long.toString(storyId)));
+		logRepository.save(new AppLogs(new Date(), name, "findTop5TagsByStoryId", LogStatus.SUCCESS.name(),
+				Long.toString(storyId)));
 		return repository.findTop5TagsByStoryId(storyId);
 	}
-	
+
 	@RequestMapping("/findTop10TagsByStoryId")
 	public Iterable<String> findTop10TagsByStoryId(@RequestParam("storyId") long storyId) {
-		logRepository.save(new AppLogs(new Date(), name, "findTop10TagsByStoryId", LogStatus.SUCCESS.name(), Long.toString(storyId)));
+		logRepository.save(new AppLogs(new Date(), name, "findTop10TagsByStoryId", LogStatus.SUCCESS.name(),
+				Long.toString(storyId)));
 		return repository.findTop10TagsByStoryId(storyId);
+	}
+
+	@RequestMapping("/findTop5Tags")
+	public Iterable<String> findTop5Tags() {
+		logRepository.save(new AppLogs(new Date(), name, "findTop5Tags", LogStatus.SUCCESS.name(), null));
+		return repository.findTop5Tags();
 	}
 }
