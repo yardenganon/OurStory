@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ourstoryapp.da.LogRepository;
@@ -136,8 +137,8 @@ public class MemoryController {
 		return repository.findMemoriesByTag(story, tag);
 	}
 
-	@RequestMapping("/findMemoriesByKeyword/{description}")
-	public Iterable<Memory> findMemoriesByKeyword(String description) {
+	@RequestMapping("/findMemoriesByKeyword")
+	public Iterable<Memory> findMemoriesByKeyword(@RequestParam("description") String description) {
 		logRepository
 				.save(new AppLogs(new Date(), name, "findMemoriesByKeyword", LogStatus.SUCCESS.name(), description));
 
