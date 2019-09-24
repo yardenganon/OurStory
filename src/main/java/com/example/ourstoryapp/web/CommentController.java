@@ -50,7 +50,7 @@ public class CommentController {
 		comment.setCreateDate(new Date());
 		Memory m = memRepository.findById(id).get();
 		if (m == null) {
-			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.FAILURE.name(), comment.toString()));
+			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.FAILURE.name(),comment.toString()));
 			return null;
 
 		} else {

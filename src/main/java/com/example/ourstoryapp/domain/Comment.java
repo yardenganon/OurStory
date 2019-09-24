@@ -119,4 +119,9 @@ public class Comment {
 		this.text = text;
 	}
 
+	@Override
+	public String toString() {
+		return "Comment [id=" + id + ", memory=" + memory.getMemory_id() + ", users=" + users + "]";
+	}
+
 }
