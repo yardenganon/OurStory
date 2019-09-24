@@ -12,6 +12,7 @@ import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.da.StoryRepository;
 import com.example.ourstoryapp.da.TagRepository;
 import com.example.ourstoryapp.da.UserRepository;
+import com.example.ourstoryapp.web.CommentController;
 import com.example.ourstoryapp.web.MemoryController;
 import com.example.ourstoryapp.web.UserController;
 
@@ -33,7 +34,7 @@ public class OurstoryappApplication {
 	private TagRepository tag_repository;
 	@Autowired
 	private MemoryController memoryController;
-	
+
 	
 	@Autowired
 	private UserController uc;
@@ -113,7 +114,6 @@ public class OurstoryappApplication {
 //			videos.add("www.google1.com");
 //			videos.add("www.google2.com");
 //			memoryController.addMediaToMemory(60, pictures, videos, tags);
-			
 		};
 	}
 
