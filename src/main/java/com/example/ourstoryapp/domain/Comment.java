@@ -121,7 +121,7 @@ public class Comment {
 
 	@Override
 	public String toString() {
-		return "Comment [id=" + id + ", memory=" + memory.getMemory_id() + ", users=" + users + "]";
+		return "Comment [id=" + id + ", users=" + users + "]";
 	}
 
 }

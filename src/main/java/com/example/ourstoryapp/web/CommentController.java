@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ourstoryapp.da.CommentRepository;
@@ -50,7 +51,7 @@ public class CommentController {
 		comment.setCreateDate(new Date());
 		Memory m = memRepository.findById(id).get();
 		if (m == null) {
-			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.FAILURE.name(),comment.toString()));
+			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.FAILURE.name(), comment.toString()));
 			return null;
 
 		} else {
