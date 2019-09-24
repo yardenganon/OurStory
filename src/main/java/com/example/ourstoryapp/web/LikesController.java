@@ -41,11 +41,11 @@ public class LikesController {
 	public ResponseEntity<Likes> create(@Valid @RequestBody Likes like) {
 		Likes s = repository.save(like);
 		if ((repository.findById(s.getLike_id()).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
-			logRepository.save(new AppLogs(new Date(), name, "CreateStory", LogStatus.SUCCESS.name(), s.toString()));
+			logRepository.save(new AppLogs(new Date(), name, "CreateLike", LogStatus.SUCCESS.name(), s.toString()));
 			return repository.findById(s.getLike_id()).map(record -> ResponseEntity.ok().body(record))
 					.orElse(ResponseEntity.notFound().build());
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "CreateStory", LogStatus.FAILURE.name(), s.toString()));
+			logRepository.save(new AppLogs(new Date(), name, "CreateLike", LogStatus.FAILURE.name(), s.toString()));
 			return ResponseEntity.notFound().build();
 		}
 	}
