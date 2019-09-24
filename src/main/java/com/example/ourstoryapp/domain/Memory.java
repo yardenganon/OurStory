@@ -215,6 +215,11 @@ public class Memory {
 	}
 
 	@Override
+	public String toString() {
+		return "Memory [memory_id=" + memory_id + "] StoryID: "+ +this.story.getStory_id();
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
