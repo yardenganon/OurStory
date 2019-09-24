@@ -182,4 +182,13 @@ public class User {
 			return false;
 		return true;
 	}
+
+
+
+	@Override
+	public String toString() {
+		return "User [user_id=" + user_id + ", email=" + email + ", first_name=" + first_name + ", last_name="
+				+ last_name + "]";
+	}
+	
 }

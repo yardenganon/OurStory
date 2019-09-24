@@ -96,7 +96,7 @@ public class UserController {
 	@PostMapping("/create")
 	public User create(@Valid @RequestBody User user) {
 		if (repository.findByEmail(user.getEmail()) == null) {
-			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), user.toString()));
+			logRepository.save(new AppLogs(new Date(), name, "CreateUser", LogStatus.SUCCESS.name(), user.toString()));
 			user.setDate_of_sign_up(new Date());
 			user.setEmail(user.getEmail().toLowerCase());
 			user.setDate_of_last_sign_in(new Date());
@@ -105,7 +105,7 @@ public class UserController {
 					  .toString());
 			return repository.save(user);
 		} else {
-			logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.FAILURE.name(), user.toString()));
+			logRepository.save(new AppLogs(new Date(), name, "CreateUser", LogStatus.FAILURE.name(), user.toString()));
 			return null;
 		}
 
