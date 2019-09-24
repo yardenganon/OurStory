@@ -114,4 +114,9 @@ public class Story {
 		this.story_id = story_id;
 	}
 
+	@Override
+	public String toString() {
+		return "Story [story_id=" + story_id + ", name_of_person=" + name_of_person + "]";
+	}
+
 }

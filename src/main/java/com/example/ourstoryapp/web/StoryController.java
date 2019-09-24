@@ -54,9 +54,18 @@ public class StoryController {
 
 	// create new instance of Story (Create)
 	@PostMapping("/create")
-	public Story create(@Valid @RequestBody Story story) {
-		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), story.toString()));
-		return repository.save(story);
+	public ResponseEntity<Story> create(@Valid @RequestBody Story story) {
+		Story s = repository.save(story);
+		if ((repository.findById(s.getStory_id()).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
+			logRepository.save(new AppLogs(new Date(), name, "CreateStory", LogStatus.SUCCESS.name(), s.toString()));
+			return repository.findById(s.getStory_id()).map(record -> ResponseEntity.ok().body(record))
+					.orElse(ResponseEntity.notFound().build());
+		}
+		else
+		{
+			logRepository.save(new AppLogs(new Date(), name, "CreateStory", LogStatus.FAILURE.name(), s.toString()));
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 	// get story by ID (Read)
