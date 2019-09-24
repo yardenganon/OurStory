@@ -63,4 +63,9 @@ public class Likes implements Serializable {
 		this.users = user;
 	}
 
+	@Override
+	public String toString() {
+		return "Likes [like_id=" + like_id + ", memoryId=" + memory.getMemory_id() + "]";
+	}
+
 }

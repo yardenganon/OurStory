@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ourstoryapp.da.LikesRepository;
 import com.example.ourstoryapp.da.LogRepository;
+import com.example.ourstoryapp.da.MemoryRepository;
 import com.example.ourstoryapp.da.StoryRepository;
 import com.example.ourstoryapp.domain.AppLogs;
 import com.example.ourstoryapp.domain.Likes;
 import com.example.ourstoryapp.domain.LogStatus;
+import com.example.ourstoryapp.domain.Memory;
 import com.example.ourstoryapp.domain.Story;
 
 @RestController
@@ -29,6 +31,10 @@ public class LikesController {
 	LikesRepository repository;
 	@Autowired
 	private LogRepository logRepository;
+	
+	@Autowired
+	private MemoryRepository memRepository;
+	
 	final String name = LikesController.class.getName();
 
 	@GetMapping("/findAll")
@@ -37,8 +43,10 @@ public class LikesController {
 		return repository.findAll();
 	}
 
-	@PostMapping("/create")
-	public ResponseEntity<Likes> create(@Valid @RequestBody Likes like) {
+	@PostMapping("/create/{id}")
+	public ResponseEntity<Likes> create(@PathVariable(value = "id") long id, @Valid @RequestBody Likes like) {
+		Memory m = memRepository.findById(id).get();
+		like.setMemory(m);
 		Likes s = repository.save(like);
 		if ((repository.findById(s.getLike_id()).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
 			logRepository.save(new AppLogs(new Date(), name, "CreateLike", LogStatus.SUCCESS.name(), s.toString()));
