@@ -30,6 +30,7 @@ import com.example.ourstoryapp.domain.AppLogs;
 import com.example.ourstoryapp.domain.LogStatus;
 import com.example.ourstoryapp.domain.Memory;
 import com.example.ourstoryapp.domain.Picture;
+import com.example.ourstoryapp.domain.Story;
 import com.example.ourstoryapp.domain.Tag;
 import com.example.ourstoryapp.domain.Video;
 import com.example.ourstoryapp.domain.ViewStoryObject;
@@ -58,10 +59,17 @@ public class MemoryController {
 	}
 
 	@PostMapping("/create")
-	public Memory create(@Valid @RequestBody Memory memory) {
-		logRepository.save(new AppLogs(new Date(), name, "create", LogStatus.SUCCESS.name(), memory.toString()));
-		memory.setCreate_date(new Date());
-		return repository.save(memory);
+	public ResponseEntity<Memory> create(@Valid @RequestBody Memory memory) {
+		Memory s = repository.save(memory);
+		if ((repository.findById(s.getMemory_id()).map(record -> ResponseEntity.ok().body(record)).isPresent())) {
+			logRepository.save(new AppLogs(new Date(), name, "CreateMemory", LogStatus.SUCCESS.name(), s.toString()));
+			return repository.findById(s.getMemory_id()).map(record -> ResponseEntity.ok().body(record))
+					.orElse(ResponseEntity.notFound().build());
+		} else {
+			logRepository.save(new AppLogs(new Date(), name, "CreateMemory", LogStatus.FAILURE.name(), s.toString()));
+			return ResponseEntity.notFound().build();
+		}
+
 	}
 
 	@GetMapping("/findById/{id}")
@@ -324,6 +332,4 @@ public class MemoryController {
 		return repository.ViewStoryHelperMethod(story);
 	}
 
-	
-	
 }
