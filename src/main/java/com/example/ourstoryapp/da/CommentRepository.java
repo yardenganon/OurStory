@@ -16,7 +16,7 @@ public interface CommentRepository extends JpaRepository <Comment,Long> {
 	// get list of comments by Memory ID
 	
 	
-	@Query(value = "SELECT Comment.* FROM COMMENT WHERE Comment.memory = ?1 ORDER BY Comment.create_date DESC", nativeQuery = true)
+	@Query(value = "SELECT Comment.* FROM COMMENT WHERE Comment.memory = ?1 ORDER BY Comment.id DESC", nativeQuery = true)
 	List<Comment> getMemoryComments(long memoryId);
 
 }
